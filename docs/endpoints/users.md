@@ -22,8 +22,8 @@ The User API provides operations for user management.
 		- [List Users with Status (Filter)](#list-users-with-status-filter)
 	- [Update User](#update-user)
 		- [Update Profile](#update-profile)
-		- [Update Password](#update-password)
-		- [Update Recovery Question & Answer](#update-recovery-question--answer)
+		- [Set Password](#set-password)
+		- [Set Recovery Question & Answer](#set-recovery-question--answer)
 - [Related Resources](#related-resources)
 	- [Get Assigned App Links](#get-assigned-app-links)
 	- [Get Member Groups](#get-member-groups)
@@ -104,7 +104,7 @@ transitioningToStatus | target status of an inprogress asynchronous status trans
 
 *Note: These attributes are only available after a user is created*
 
-`activated` timestamp will only be avaialble to users created after *06/30/2013*.
+`activated` timestamp will only be avaialble to users activated after *06/30/2013*.
 
 `statusChanged` and `lastLogin` timestamps will be missing for users created before *06/30/2013*.  They will be updated on next status change or login.
 
@@ -921,7 +921,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }
 ```   
 
-### Update Password
+### Set Password
 
 This is an administrative operation and does not validate existing user credentials.  For operations that validate credentials refer to:
 
@@ -987,7 +987,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }
 ```    
 
-### Update Recovery Question & Answer
+### Set Recovery Question & Answer
 
 This is an administrative operation and does not validate existing user credentials.  See [Change Recovery Question](#change-recovery-question) for an operation that requires validation
 
@@ -1175,6 +1175,8 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 # Lifecycle Operations
 
+Lifecyce operations are non-idempotent operations that iniate a state transition for a user's status.  Some operations are asynchronous while others are synchronous.  The user's current status limits what operations are allowed.  For example, you can't unlock a user that is `ACTIVE`.
+
 ## Activate User
 
 #### POST /users/:id/lifecycle/activate
@@ -1221,7 +1223,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 ## Deactivate User
 
-#### POST /users/:id/lifecycle/dectivate
+#### POST /users/:id/lifecycle/deactivate
 
 Deactivates a user.  This operation can only be performed on users that do not have a **DEPROVISIONED** `status`.  Deactivation of a user is an asynchronous operation.  The user will have the `transitioningToStatus` property with a value of **DEPROVISIONED** during deactivation to indicate that the user hasn't completed the asynchronous operation.  The user will have a `status` of **DEPROVISIONED** when the deactivation process is complete.
 
@@ -1274,7 +1276,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 ### POST /users/:id/lifecycle/reset_password
 
-Resets the password for a user. The user will transition to the `status` of **RECOVERY** and will not be able to login until they complete the reset flow.
+Generates a one-time token (OTT) that can be used to reset a user's password.  The OTT link can be automatically emailed to the user or returned to the API caller and distributed using a custom flow.
+
+This operation will transition the user to the `status` of **RECOVERY** and the user will not be able to login or initiate a forgot password flow until they complete the reset flow.
 
 #### Request Parameters
 
@@ -1316,7 +1320,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 ### POST /users/:id/lifecycle/forgot_password
 
-Generates a one-time token that can be used to reset a user's password.  The user will be required to validate their security question's answer when visiting the reset link.  This operation can only be performed on users in **ACTIVE** or **RECOVERY** `status` that have a valid [recovery question credential](#recovery-question-object)
+Generates a one-time token (OTT) that can be used to reset a user's password.  The user will be required to validate their security question's answer when visiting the reset link.  This operation can only be performed on users with a valid [recovery question credential](#recovery-question-object) and have an **ACTIVE** `status`.
 
 #### Request Parameters
 
@@ -1354,8 +1358,11 @@ curl -v -H "Authorization:SSWS yourtoken" \
 ```
 
 ### POST /users/:id/credentials/forgot_password
+  
+Sets a new password for a user by validating the user's answer to their current recovery question.  This operation can only be performed on users with a valid [recovery question credential](#recovery-question-object) and have an **ACTIVE** `status`.
 
-Sets a new password for a user by validating the user's answer to their current recovery question.  This operation can only be performed on users in **ACTIVE** or **RECOVERY** `status` that have a valid [recovery question credential](#recovery-question-object)
+*Note: This operation is intended for applications that need to implement their own forgot password flow.  You are responsibile for mitigation of all security risks such as phishing and replay attacks.  Best-practice is to generate a expirable one-time token (OTT) that is sent to a verified email account.*
+
 
 #### Request Parameters
 
@@ -1369,7 +1376,7 @@ recovery_question | Answer to user's current recovery question | Body | [Recover
 
 [Credentials](#credentials-object) of the user
 
-*Note: The user will transition to __ACTIVE__ status when successfully invoked in __RECOVERY__ status*
+*Note: This operation does not affect the status of the user.*
 
 #### Request
 
