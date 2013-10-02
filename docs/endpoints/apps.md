@@ -14,9 +14,12 @@ __This API is currently in `Beta` status and documentation is *draft* quality.  
 		- [SignOn Modes](#signon-modes)
 	- [Accessibility Object](#accessibility-object)
 	- [Visibility Object](#visibility-object)
+		- [Hide Object](#hide-object) 
+		- [AppLinks Object](#applinks-object)
 	- [Application Credentials Object](#application-credentials-object)
 		- [Authentication Schemes](#authentication-schemes)
-	- [UserName Template Object](#username-template-object)
+		- [UserName Template Object](#username-template-object)
+			- [Built-In Expressions](#built-in-expressions)
 	- [Password Object](#password-object)
 - [Application User Model](#application-user-model)
 	- [Application User Attributes](#application-user-attributes)
@@ -24,14 +27,14 @@ __This API is currently in `Beta` status and documentation is *draft* quality.  
 - [Application Group Model](#application-group-model)
 	- [Application Group Attributes](#application-group-attributes)
 - [Application Operations](#application-operations)
-	- [Create Template Application](#create-template-application)
-		- [Create Bookmark Application](#create-bookmark-application)
-		- [Create Basic Authentication Application](#create-basic-authentication-application)
-		- [Create Plugin SWA Application](#create-plugin-swa-application)
-		- [Create Plugin SWA (3 Field) Application](#create-plugin-swa-3-field-application)
-		- [Create SWA Application (No Plugin)](#create-swa-application-no-plugin)
-		- [Create SAML 2.0 Application](#create-saml-20-application)
-		- [Create WS-Federation Application](#create-ws-federation-application)
+	- [Add Application](#add-application)
+		- [Add Bookmark Application](#add-bookmark-application)
+		- [Add Basic Authentication Application](#add-basic-authentication-application)
+		- [Add Plugin SWA Application](#add-plugin-swa-application)
+		- [Add Plugin SWA (3 Field) Application](#add-plugin-swa-3-field-application)
+		- [Add SWA Application (No Plugin)](#add-swa-application-no-plugin)
+		- [Add SAML 2.0 Application](#add-saml-20-application)
+		- [Add WS-Federation Application](#add-ws-federation-application)
 	- [Get Application](#get-application)
 	- [List Applications](#list-applications)
 	- [Update Application](#update-application)
@@ -148,13 +151,13 @@ The catalog is currently not exposed via an API endpoint.  While additional apps
 
 Name | Example
 --- | ---
-bookmark | [Create Bookmark Application](#create-bookmark-application)
-template_basic_auth | [Create Basic Authentication Application](#create-basic-authentication-application)
-template_swa | [Create Plugin SWA Application](#create-plugin-swa-application)
-template_swa3field | [Create Plugin SWA (3 Field) Application](#create-plugin-swa-3-field-application)
-tempalte_sps | [Create SWA Application (No Plugin)](#create-swa-application-no-plugin)
-template_saml_2_0 | [Create SAML 2.0 Application](#create-saml-20-application)
-template_wsfed | [Create WS-Federation Application](#create-ws-federation-application)
+bookmark | [Add Bookmark Application](#add-bookmark-application)
+template_basic_auth | [Add Basic Authentication Application](#add-basic-authentication-application)
+template_swa | [Add Plugin SWA Application](#add-plugin-swa-application)
+template_swa3field | [Add Plugin SWA (3 Field) Application](#add-plugin-swa-3-field-application)
+tempalte_sps | [Add SWA Application (No Plugin)](#add-swa-application-no-plugin)
+template_saml_2_0 | [Add SAML 2.0 Application](#add-saml-20-application)
+template_wsfed | [Add WS-Federation Application](#add-ws-federation-application)
 
 The current workaround is to manually configure the desired application via the Administration UI in a preview (sandbox) organization and view the application via [Get Application](#get-application)
 
@@ -202,10 +205,12 @@ selfService | Enable self service application assignment | Boolean | | | TRUE | 
 errorRedirectUrl | Custom error page for this application | String | | | TRUE | NULL (Global Error Page)
 
 ```json
+{
     "accessibility": {
         "selfService": false,
         "errorRedirectUrl": null
     }
+}    
 ```
 
 ## Visibility Object
@@ -218,6 +223,7 @@ hide | Hides this app for specific end-user apps | [Hide Object](#hide-object) |
 appLinks | Displays specific appLinks for the app | [AppLinks Object](#applinks-object) | | | FALSE |
 
 ```json
+{
     "visibility": {
         "autoSubmitToolbar": false,
         "hide": {
@@ -228,6 +234,7 @@ appLinks | Displays specific appLinks for the app | [AppLinks Object](#applinks-
             "login": true
         }
     }
+}
 ```
 
 ### Hide Object
@@ -251,6 +258,7 @@ userName | Shared username for app | String | 1 | 100 | TRUE | NULL
 password | Shared password for app | [Password Object](#password-object) | | | TRUE | NULL
 
 ```json
+{
     "credentials": {
         "scheme": "SHARED_USERNAME_AND_PASSWORD",
         "userNameTemplate": {
@@ -260,6 +268,7 @@ password | Shared password for app | [Password Object](#password-object) | | | T
         "userName": "test",
         "password": {}
     }
+}   
 ```
 
 ### Authentication Schemes
@@ -275,7 +284,7 @@ EDIT_PASSWORD_ONLY	| Administrator sets username, user sets password | | | Admin
 
 *Note: `BOOKMARK`, `SAML_2_0`, and `WS_FEDERATION` signOnModes do not support an authentication scheme as they use a federated SSO protocol.  The `scheme` property should be omitted for apps with these signOnModes*
 
-## UserName Template Object
+### UserName Template Object
 
 Specifies the template used to generate a user's username when the application is assigned via a group or directly to a user
 
@@ -288,13 +297,15 @@ userSuffix | suffix for built-in mapping expressions | String | | | TRUE | NULL
 *Note: You must use the `CUSTOM` type when defining your own expression that is not built-in*
 
 ```json
-"userNameTemplate": {
-    "template": "${source.login}",
-    "type": "BUILT_IN"
-}
+{
+    "userNameTemplate": {
+        "template": "${source.login}",
+        "type": "BUILT_IN"
+    }
+}    
 ```
 
-### Built-In Expressions
+#### Built-In Expressions
 The following expressions are built-in and may be used with the `BUILT_IN` template type:
 
 Name | Template Expression
@@ -362,10 +373,12 @@ userName | username for app | String | 1 | 100 | TRUE | NULL
 password | password for app | [Password Object](#password-object) | | | TRUE | NULL
 
 ```json
+{
     "credentials": {
         "userName": "test",
         "password": {}
     }
+}    
 ```
 
 *Note: The [UserName Template Object](#username-template-object) defines the default username generated when a user is assigned to an application.*
@@ -416,9 +429,9 @@ _links | discoverable resources related to the app group | [JSON HAL](http://too
 
 # Application Operations
 
-## Create Template Application
+## Add Application
 
-Creates a new template application in your Okta organization.
+Adds a new application to your Okta organization.
 
 ### POST /apps
 
@@ -426,15 +439,15 @@ Creates a new template application in your Okta organization.
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
-app | Template app | Body | [Application](#application-model) | TRUE |
+app | App-specific name, signOnMode and settings | Body | [Application](#application-model) | TRUE |
 
 #### Response Parameters
 
 All responses return the created [Application](#application-model).
 
-### Create Bookmark Application
+### Add Bookmark Application
 
-Creates an new bookmark application.
+Adds an new bookmark application to your organization.
 
 #### Settings
 
@@ -450,7 +463,7 @@ requestIntegration | Would you like Okta to add an integration for this app? | B
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/apps \
+-X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
     "name": "bookmark",
@@ -513,9 +526,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
     }
 ```
 
-### Create Basic Authentication Application
+### Add Basic Authentication Application
 
-Creates an new application that uses HTTP Basic Authentication Scheme.
+Add an new application that uses HTTP Basic Authentication Scheme and requires a browser plugin.
 
 #### Settings
 
@@ -531,7 +544,7 @@ authURL | The URL of the authenticating site for this app | String | FALSE | FAL
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/apps \
+-X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
     "name": "template_basic_auth",
@@ -596,7 +609,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }
 ```
 
-### Create Plugin SWA Application
+### Add Plugin SWA Application
+
+Adds a SWA application that requires a browser plugin.
 
 #### Settings
 
@@ -614,7 +629,7 @@ buttonField | CSS selector for the login button in the login form | String | FAL
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/apps \
+-X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
     "name": "template_swa",
@@ -683,7 +698,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }
 ```
 
-### Create Plugin SWA (3 Field) Application
+### Add Plugin SWA (3 Field) Application
+
+Adds a SWA application that requires a browser plugin and supports 3 CSS selectors for the login form.
 
 #### Settings
 
@@ -702,7 +719,7 @@ extraFieldValue | Value for extra field form field | String | FALSE | FALSE |
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/apps \
+-X "POST https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
     "name": "template_swa3field",
@@ -776,7 +793,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 ```
 
 
-### Create SWA Application (No Plugin)
+### Add SWA Application (No Plugin)
+
+Adds a SWA application that uses HTTP POST and does not require a browser plugin
 
 #### Settings
 
@@ -799,7 +818,7 @@ optionalField3Value | Name of the optional value in the login form | String | TR
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/apps \
+-X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
     "name": "template_sps",
@@ -818,7 +837,6 @@ curl -v -H "Authorization:SSWS yourtoken" \
             "optionalField3Value": "finalvalue"
         }
     }
-}
 }'
 ```
 
@@ -879,10 +897,19 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }
 ```
 
-### Create SAML 2.0 Application
+### Add SAML 2.0 Application
 
-```json
-{
+Adds a SAML 2.0 WebSSO application
+
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-H "Content-type:application/json" \
+-X POST "https://your-domain.okta.com/api/v1/apps" \
+-d \
+'{
     "name": "template_saml_2_0",
     "label": "Example SAML App",
     "signOnMode": "SAML_2_0",
@@ -905,12 +932,22 @@ curl -v -H "Authorization:SSWS yourtoken" \
             "attributeStatements": null
         }
     }
-}
+}'
 ```
 
-### Create WS-Federation Application
-```json
-{
+### Add WS-Federation Application
+
+Adds a WS-Federation Passive Requestor Profile application with a SAML 2.0 token
+
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-H "Content-type:application/json" \
+-X POST "https://your-domain.okta.com/api/v1/apps" \
+-d \
+'{
     "name": "template_wsfed",
     "label": "Sample WS-Fed App",
     "signOnMode": "WS_FEDERATION",
@@ -930,7 +967,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
             "usernameAttribute": "username"
         }
     }
-}
+}'
 ```
 
 ## Get Application
@@ -957,7 +994,7 @@ Fetched [Application](#application-model)
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD 
+-X GET "https://your-domain.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD"
 ```
 
 #### Response
@@ -1053,7 +1090,7 @@ Array of [Application](#application-model)
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/apps 
+-X GET "https://your-domain.okta.com/api/v1/apps"
 ```
 
 #### Response
@@ -1197,7 +1234,7 @@ Updated [Application](#application-model)
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
     "name": "template_swa",
@@ -1300,7 +1337,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
     "name": "template_swa",
@@ -1400,7 +1437,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
     "name": "template_swa",
@@ -1500,7 +1537,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
     "name": "template_swa",
@@ -1624,7 +1661,7 @@ All responses return the assigned [Application User](#application-user-model).
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" \
 -d \
 '{
     "id": "00ud4tVDDXYVKPXKVLCO",
@@ -1680,7 +1717,7 @@ Fetched [Application User](#application-user-model)
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO 
+-X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO"
 ```
 
 #### Response
@@ -1728,7 +1765,7 @@ Array of [Application Users](#application-user-model)
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users 
+-X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users"
 ```
 
 #### Response
@@ -1806,7 +1843,7 @@ All responses return the assigned [Application User](#application-user-model).
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" \
 -d \
 '{
     "id": "00ud4tVDDXYVKPXKVLCO",
@@ -1861,7 +1898,7 @@ An empty JSON object `{}`
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -H "Content-type:application/json" \
--X DELETE https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO 
+-X DELETE "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" 
 ```
 
 #### Response
@@ -1890,6 +1927,28 @@ appgroup | App group | Body | [Application Group](#application-group-model) | FA
 
 All responses return the assigned [Application Group](#application-group-model).
 
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-H "Content-type:application/json" \
+-X PUT "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR" \
+-d \
+'{
+}'
+```
+
+#### Response
+
+```json
+{
+    "id": "00gbkkGFFWZDLCNTAGQR",
+    "lastUpdated": "2013-10-02T07:38:20.000Z",
+    "priority": 0
+}
+```
+
 ## Get Assigned Group for Application
 
 Fetches an application group assignment
@@ -1903,11 +1962,30 @@ Fetch a specific app group assignment by id.
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 aid | unique key of [Application](#application-model) | URL | String | TRUE |
-gid | unique key of a valid [Group](../groups.md) | URL | String | TRUE |
+gid | unique key of an assigned [Group](../groups.md) | URL | String | TRUE |
 
 #### Response Parameters
 
 Fetched [Application Group](#application-group-model)
+
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-H "Content-type:application/json" \
+-X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR"
+```
+
+#### Response
+
+```json
+{
+    "id": "00gbkkGFFWZDLCNTAGQR",
+    "lastUpdated": "2013-10-02T07:38:20.000Z",
+    "priority": 0
+}
+```
 
 ## List Groups Assigned to Application
 
@@ -1929,6 +2007,32 @@ after | Specifies the pagination cursor for the next page of assignments | Query
 
 Array of [Application Groups](#application-group-model)
 
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-H "Content-type:application/json" \
+-X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups"
+```
+
+#### Response
+
+```json
+[
+    {
+        "id": "00gbkkGFFWZDLCNTAGQR",
+        "lastUpdated": "2013-10-02T07:38:20.000Z",
+        "priority": 0
+    },
+    {
+        "id": "00gg0xVALADWBPXOFZAS",
+        "lastUpdated": "2013-10-02T14:40:29.000Z",
+        "priority": 1
+    }
+]
+```
+
 ## Remove Group from Application
 
 Removes a group from an application.
@@ -1942,9 +2046,23 @@ Remove a specific app group assignment by id.
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 aid | unique key of [Application](#application-model) | URL | String | TRUE |
-gid | unique key of a valid [Group](../groups.md) | URL | String | TRUE |
+gid | unique key of an assigned [Group](../groups.md) | URL | String | TRUE |
 
 #### Response Parameters
 
 An empty JSON object `{}`
 
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-H "Content-type:application/json" \
+-X DELETE "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR"
+```
+
+#### Response
+
+```json
+{}
+```
