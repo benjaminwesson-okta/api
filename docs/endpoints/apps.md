@@ -2,7 +2,10 @@
 
 The Application API provides operations to manage applications and/or assignments to users or groups for your organization.
 
-**Note: This API currently only supports applications without user-management features enabled at this time**
+** This API is currently in `Beta` status and documentation is *draft* quality.  There may be small inconsistencies with actual API.**
+
+*Note: This API currently only supports applications without user-management features enabled at this time*
+
 
 - [Application Model](#application-model)
 	- [Application Attributes](#application-attributes)
