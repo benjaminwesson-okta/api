@@ -2,7 +2,7 @@
 
 The Application API provides operations to manage applications and/or assignments to users or groups for your organization.
 
-** This API is currently in `Beta` status and documentation is *draft* quality.  There may be small inconsistencies with actual API.**
+__This API is currently in `Beta` status and documentation is *draft* quality.  There may be small inconsistencies with actual API.__
 
 *Note: This API currently only supports applications without user-management features enabled at this time*
 
@@ -15,7 +15,7 @@ The Application API provides operations to manage applications and/or assignment
 	- [Accessibility Object](#accessibility-object)
 	- [Visibility Object](#visibility-object)
 	- [Application Credentials Object](#application-credentials-object)
-		- [Authentication Scheme](#authentication-schemes)
+		- [Authentication Schemes](#authentication-schemes)
 	- [UserName Template Object](#username-template-object)
 	- [Password Object](#password-object)
 - [Application User Model](#application-user-model)
@@ -43,7 +43,7 @@ The Application API provides operations to manage applications and/or assignment
 	- [Assign User to Application](#assign-user-to-application)
 	- [Get Assigned User for Application](#get-assigned-user-for-application)
 	- [List Users Assigned to Application](#list-users-assigned-to-application)
-	- [Update Credentials for Application](#updated-credentials-for-application)
+	- [Update Credentials for Application](#update-credentials-for-application)
 	- [Remove User from Application](#remove-user-from-application)
 - [Application Group Operations](#application-group-operations)
 	- [Assign Group to Application](#assign-group-to-application)
@@ -353,7 +353,7 @@ lastUpdated | timestamp when app user was last updated | Date | | | FALSE | FALS
 credentials | credentials for assigned app | [Application User Credentials Object](#application-user-credentials-object) | | | TRUE | FALSE | FALSE
 _links | discoverable resources related to the app user | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-05) | | | TRUE | FALSE | TRUE
 
-## Application Credentials Object
+## Application User Credentials Object
 Specifies a user's credentials for the application.  The [Authentication Scheme](#authentication-schemes) of the app determines whether a userName or password can be assigned to a user.
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Default
