@@ -17,6 +17,7 @@ Contents
 * [Sessions](endpoints/sessions.md)
 * [Tokens](endpoints/tokens.md)
 * [Events](endpoints/events.md)
+* [Apps](endpints/apps.md) (Beta)
 
 ### Examples
 * [Retrieving a session cookie with a hidden image](examples/session_cookie.md)
