@@ -7,8 +7,8 @@ Contents
 --------
 
 ### Getting Started
-* [Getting a token](getting_started/getting_a_token.md)
-* [Design principles](getting_started/design_principles.md)
+* [Getting an API Token](getting_started/getting_a_token.md)
+* [Design Principles](getting_started/design_principles.md)
 * [Error Codes](getting_started/error_codes.md)
 
 ### Endpoints
@@ -20,4 +20,4 @@ Contents
 * [Apps](endpoints/apps.md) (Beta)
 
 ### Examples
-* [Retrieving a session cookie with a hidden image](examples/session_cookie.md)
+* [Retrieving a Session Cookie](examples/session_cookie.md)
