@@ -197,7 +197,7 @@ Content-Type: application/json
     "id": "000kYk6cDF7R02z4PxV5mhL4g",
     "userId": "00u9apFCRAIKHVPZLGXT",
     "mfaActive": false,
-    "cookieTokenUrl": "https://*your-subdomain.okta.com*/login/sessionCookie?token=00nwBmuBFS4o2E5l58eSbgnr4NmY0-ELQR4Pvn2RZV"
+    "cookieTokenUrl": "https://your-subdomain.okta.com/login/sessionCookie?token=00nwBmuBFS4o2E5l58eSbgnr4NmY0-ELQR4Pvn2RZV"
 } 
 ``` 
 
