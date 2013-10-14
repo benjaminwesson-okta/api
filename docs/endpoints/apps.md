@@ -460,9 +460,9 @@ requestIntegration | Would you like Okta to add an integration for this app? | B
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -541,9 +541,9 @@ authURL | The URL of the authenticating site for this app | String | FALSE | FAL
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -626,9 +626,9 @@ buttonField | CSS selector for the login button in the login form | String | FAL
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -716,9 +716,9 @@ extraFieldValue | Value for extra field form field | String | FALSE | FALSE |
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X "POST https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -815,9 +815,9 @@ optionalField3Value | Name of the optional value in the login form | String | TR
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -904,9 +904,9 @@ Adds a SAML 2.0 WebSSO application
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -942,9 +942,9 @@ Adds a WS-Federation Passive Requestor Profile application with a SAML 2.0 token
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X POST "https://your-domain.okta.com/api/v1/apps" \
 -d \
 '{
@@ -991,9 +991,9 @@ Fetched [Application](#application-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD"
 ```
 
@@ -1087,9 +1087,9 @@ Array of [Application](#application-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X GET "https://your-domain.okta.com/api/v1/apps"
 ```
 
@@ -1231,9 +1231,9 @@ Updated [Application](#application-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
@@ -1334,9 +1334,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
@@ -1434,9 +1434,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
@@ -1534,9 +1534,9 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS" \
 -d \
 '{
@@ -1658,9 +1658,9 @@ All responses return the assigned [Application User](#application-user-model).
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" \
 -d \
 '{
@@ -1714,9 +1714,9 @@ Fetched [Application User](#application-user-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO"
 ```
 
@@ -1762,9 +1762,9 @@ Array of [Application Users](#application-user-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users"
 ```
 
@@ -1840,9 +1840,9 @@ All responses return the assigned [Application User](#application-user-model).
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" \
 -d \
 '{
@@ -1895,9 +1895,9 @@ An empty JSON object `{}`
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X DELETE "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" 
 ```
 
@@ -1930,9 +1930,9 @@ All responses return the assigned [Application Group](#application-group-model).
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X PUT "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR" \
 -d \
 '{
@@ -1971,9 +1971,9 @@ Fetched [Application Group](#application-group-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR"
 ```
 
@@ -2010,9 +2010,9 @@ Array of [Application Groups](#application-group-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups"
 ```
 
@@ -2055,9 +2055,9 @@ An empty JSON object `{}`
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
 -X DELETE "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR"
 ```
 

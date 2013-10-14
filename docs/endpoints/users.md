@@ -104,7 +104,7 @@ transitioningToStatus | target status of an inprogress asynchronous status trans
 
 *Note: These attributes are only available after a user is created*
 
-`activated` timestamp will only be avaialble to users activated after *06/30/2013*.
+`activated` timestamp will only be available to users activated after *06/30/2013*.
 
 `statusChanged` and `lastLogin` timestamps will be missing for users created before *06/30/2013*.  They will be updated on next status change or login.
 
@@ -239,10 +239,10 @@ X|X|TRUE|ACTIVE|Password|
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users?activate=false \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users?activate=false" \
 -d \
 '{
   "profile": {
@@ -286,10 +286,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users?activate=false \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users?activate=false" \
 -d \
 '{
   "profile": {
@@ -343,10 +343,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users?activate=false \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users?activate=false" \
 -d \
 '{
   "profile": {
@@ -396,10 +396,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users?activate=false \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users?activate=false" \
 -d \
 '{
   "profile": {
@@ -471,10 +471,10 @@ Fetched [User](#user-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR"
 ```
 
 #### Response
@@ -525,10 +525,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users/isaac@example.org
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users/isaac@example.org"
 ```
 
 #### Response
@@ -578,10 +578,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users/isaac
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users/isaac"
 ```
 
 #### Response
@@ -651,10 +651,10 @@ Array of [User](#user-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users"
 ```
 
 #### Response
@@ -727,10 +727,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users?q=er&limit=1
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users?q=er&limit=1"
 ```
 
 #### Response
@@ -782,10 +782,10 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users?filter=status+eq+\"ACTIVE\"
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users?filter=status+eq+\"ACTIVE\""
 ```
 
 #### Response
@@ -860,10 +860,10 @@ Updated [User](#user-model)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X PUT "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR" \
 -d \
 '{
     "profile": {
@@ -932,10 +932,10 @@ This is an administrative operation and does not validate existing user credenti
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X PUT "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR" \
 -d \
 '{
   "credentials": {
@@ -994,10 +994,10 @@ This is an administrative operation and does not validate existing user credenti
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X PUT "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR" \
 -d \
 '{
   "credentials": {
@@ -1072,10 +1072,10 @@ Array of App Links
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/appLinks 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/appLinks"
 ```
 
 #### Response
@@ -1146,10 +1146,10 @@ id | `id` of user | URL | String | TRUE |
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/groups 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/groups" 
 ```
 
 #### Response
@@ -1175,7 +1175,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 # Lifecycle Operations
 
-Lifecyce operations are non-idempotent operations that iniate a state transition for a user's status.  Some operations are asynchronous while others are synchronous.  The user's current status limits what operations are allowed.  For example, you can't unlock a user that is `ACTIVE`.
+Lifecycle operations are non-idempotent operations that initiate a state transition for a user's status.  Some operations are asynchronous while others are synchronous.  The user's current status limits what operations are allowed.  For example, you can't unlock a user that is `ACTIVE`.
 
 ## Activate User
 
@@ -1207,10 +1207,10 @@ Returns empty object by default. When `sendEmail` is `false`, returns an activat
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/activate?sendEmail=false
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/activate?sendEmail=false"
 ```
 
 #### Response
@@ -1242,10 +1242,10 @@ Returns an empty object
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/deactivate
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/deactivate"
 ```
 
 ## Unlock User
@@ -1253,6 +1253,8 @@ curl -v -H "Authorization:SSWS yourtoken" \
 #### POST /users/:id/lifecycle/unlock
 
 Unlocks a user with a **LOCKED_OUT** status and returns them to **ACTIVE** `status`.  Users will be able to login with their current password.
+
+*Note: This operation currently only works with Okta-mastered users and does not support directory-mastered accounts such as Active Directory.*
 
 #### Request Parameters
 
@@ -1266,10 +1268,10 @@ Returns an empty object
 
 #### Request
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/unlock
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/unlock"
 ```
 
 ## Reset Password
@@ -1300,10 +1302,10 @@ Returns an empty object by default. When `sendEmail` is `false`, returns a link 
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/reset_password?sendEmail=false
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/reset_password?sendEmail=false"
 ```
 
 #### Response
@@ -1343,10 +1345,10 @@ Returns an empty object by default. When `sendEmail` is `false`, returns a link 
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/forgot_password?sendEmail=false
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/forgot_password?sendEmail=false"
 ```
 
 #### Response
@@ -1361,7 +1363,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
   
 Sets a new password for a user by validating the user's answer to their current recovery question.  This operation can only be performed on users with a valid [recovery question credential](#recovery-question-object) and have an **ACTIVE** `status`.
 
-*Note: This operation is intended for applications that need to implement their own forgot password flow.  You are responsibile for mitigation of all security risks such as phishing and replay attacks.  Best-practice is to generate a expirable one-time token (OTT) that is sent to a verified email account.*
+*Note: This operation is intended for applications that need to implement their own forgot password flow.  You are responsible for mitigation of all security risks such as phishing and replay attacks.  Best-practice is to generate a short-lived one-time token (OTT) that is sent to a verified email account.*
 
 
 #### Request Parameters
@@ -1381,10 +1383,10 @@ recovery_question | Answer to user's current recovery question | Body | [Recover
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/forgot_password \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/forgot_password" \
 -d \
 '{
     "password": { "value": "MyN3wP@55w0rd" }, 
@@ -1428,10 +1430,10 @@ newPassword | New password for user | Body | [Password Object](#password-object)
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/change_password \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/change_password" \
 -d \
 '{
     "oldPassword": { "value": "GoAw@y123" },
@@ -1475,10 +1477,10 @@ recovery_question | New recovery question & answer for user| Body | [Recovery Qu
 #### Request
 
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X POST https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/change_recovery_question \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/change_recovery_question" \
 -d \
 '{
     "password": { "value": "GoAw@y123" }, 
