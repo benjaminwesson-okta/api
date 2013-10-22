@@ -22,7 +22,7 @@ The API currently only supports JSON as an exchange format.  Be sure to set both
 
 All Date objects are returned in ISO 8601 format:
 
-    YYYY-MM-DDTHH:MM:SSZ
+    YYYY-MM-DDTHH:mm:ss.SSSZ
     
 ## HTTP Verbs
 
