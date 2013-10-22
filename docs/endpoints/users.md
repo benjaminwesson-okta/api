@@ -169,6 +169,16 @@ Attribute | DataType | MinLength | MaxLength | Nullable | Unique | Validation
 --- | --- | ---	| --- | --- | --- | ---
 value | String | *Password Policy* | 40 | TRUE | FALSE | *Password Policy* 
 
+#### Default Password Policy
+
+- Must be a minimum of 8 characters
+- Must have a character that meets 3 of the 4 following groups:
+	- Upper case
+	- Lower case
+	- Digit
+	- Non-Alpha or Digit
+- Must not contain the user's login or parts of the the login when split on the following characters: `,` `.` `_` `#` `@`
+	- *For example, a user with login i.brock@example.org will not be able set password brockR0cks! as the password contains the login part brock*
 
 ### Recovery Question Object
 
@@ -639,6 +649,9 @@ Parameter | Description | Param Type | DataType | Required | Default
 q | Searches `firstName`, `lastName`, and `email` attributes of users for matching value | Query | String | FALSE |
 limit | Specified the number of results | Query | Number | FALSE | 10000
 filter | Filters users by `status` expression (See Filter Expressions) | Query | String | FALSE | status eq "STAGED" or status eq "PROVISIONED" or status eq "ACTIVE" or status eq "RECOVERY" or status eq "LOCKED_OUT"
+after | Specifies the pagination cursor for the next page of users | Query | String | FALSE |
+
+*Note: The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
 
 *Note: Search currently performs a startsWith match but it should be considered an implementation detail and may change without notice in the future*
 
@@ -648,17 +661,27 @@ Array of [User](#user-model)
 
 ### List Users with Defaults
 
+The default user limit is set to a very high number due to historical reasons which is no longer valid for most organizations.  This will change in a future version of this API.  The recommended page limit is now `limit=200`.
+
+*Note:  If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination)*
+
 #### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X GET "https://your-domain.okta.com/api/v1/users"
+-X GET "https://your-domain.okta.com/api/v1/users?limit=200"
 ```
 
 #### Response
-```json
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://your-domain.okta.com/api/v1/users?limit=200>; rel="self"
+Link: <https://your-domain.okta.com/api/v1/users?after=00ud4tVDDXYVKPXKVLCO&limit=200>; rel="next"
+
 [
     {
         "id": "00u1ero7vZFVEIYLWPBN",
