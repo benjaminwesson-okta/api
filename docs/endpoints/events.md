@@ -438,7 +438,7 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 Link: <https://your-domain.okta.com/api/v1/events?startDate=2013-07-15T16%3A00%3A00.000Z&limit=3>; rel="self"
 Link: <https://your-domain.okta.com/api/v1/events?after=tevZxTo4IyHR9yUHIFdU0-f0w1373905100000&limit=3>; rel="next"
-```
+
 [
     {
         "eventId": "tev8hc_KK9NRzKe2WtdvVQIOg1384845263000",
