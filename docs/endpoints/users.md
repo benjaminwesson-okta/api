@@ -136,6 +136,8 @@ firstName | String | 1 | 50	| FALSE	| FALSE	|
 lastName | String | 1 | 50	| FALSE	| FALSE	|
 mobilePhone | String |	0 |	100	| TRUE | FALSE	|
 
+*Note: Avoid using a `login` with a `/` character.  Although `/` is a valid character according to [RFC 6531 section 3.3](http://tools.ietf.org/html/rfc6531#section-3.3), a user with this character in their `login` cannot be fetched by `login` ([see Get User with id](#get-user-with-id)) due to security risks with escaping this character.*
+
 ### Custom Attributes
 Custom attributes may be added to a user profile.  Custom attributes must be single-value (non-array) and have a data type of `Number`, `String`, `Boolean`, or `null`.
 
@@ -471,6 +473,8 @@ Fetch a specific user by id, login, or login shortname (as long as it is unambig
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | `id`, `login`, or *login shortname* (as long as it is unambiguous) | URL | String | TRUE |
+
+*Note: When fetching a user by `login` or `login shortname`, you should [URL encode](http://en.wikipedia.org/wiki/Percent-encoding) the request parameter to ensure reserved characters at escaped properly.  Logins with a `/` character can only be fetched by 'id' due to security issues with escaping the `/` character.*
 
 #### Response Parameters
 
