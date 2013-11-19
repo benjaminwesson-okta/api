@@ -1717,13 +1717,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 #### Response
 
 ```http
-204 No Content
+HTTP/1.1 204 No Content
 ```
 
 If the application has an `ACTIVE` status you will receive an error response.
 
-```http
-403 Forbidden
+```
+HTTP/1.1 403 Forbidden
 Content-Type: application/json
 
 {
