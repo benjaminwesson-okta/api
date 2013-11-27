@@ -15,7 +15,6 @@ Contents
 * [Users](endpoints/users.md)
 * [Groups](endpoints/groups.md)
 * [Sessions](endpoints/sessions.md)
-* [Tokens](endpoints/tokens.md)
 * [Events](endpoints/events.md)
 * [Apps](endpoints/apps.md) (Beta)
 

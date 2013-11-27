@@ -1,5 +1,7 @@
 # Token endpoints
 
+*Note:  This API is **deprecated**. Please see [Getting an API Token](/docs/getting_started/getting_a_token.md)*
+
 ## Create tokens
 
 #### POST /tokens
