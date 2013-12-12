@@ -41,10 +41,10 @@ A one-time token may only be used **once** to establish a session for a user.  I
 
 Sessions have the following attributes:
 
-Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
---- | --- | ---	| --- | --- | --- | --- | ---
+Attribute | Description | DataType | Nullable | Unique | Readonly
+--- | --- | ---	| --- | --- | ---
 id | unique key for the session | String | FALSE | TRUE | TRUE
-userId | unique key for the [user](users.md#get-user-with-id) | String | TRUE | FALSE | TRUE
+userId | unique key for the [user](users.md#get-user-with-id) | String | FALSE | FALSE | TRUE
 mfaActive | indicates whether the user has enrolled a valid MFA credential | Boolean | FALSE | FALSE | TRUE
 
 ### Conditional Token Attributes
