@@ -4,6 +4,7 @@ Okta uses a cookie-based authentication mechanism to maintain a user's authentic
 
 *Note:  The Session API currently does not support multi-factor authentication (MFA).  Sessions created for users with an assigned MFA policy will have a significantly constrained session and will not be able to access their applications.*
 
+- [Session Model](#session-model)
 - [Session Operations](#session-operations)
 	- [Create Session](#create-session)
 		- [Create Session with One-Time Token](#create-session-with-one-time-token)
@@ -24,6 +25,37 @@ A one-time token may only be used **once** to establish a session for a user.  I
 
 *Note: One-time tokens are secrets and should be protected at rest as well as during transit. A one-time token for a user is equivalent to having the user's actual credentials*
 
+# Session Model
+
+## Example
+
+```json
+{
+    "id": "000najcYVnjRS2aZG50MpHL4Q",
+    "userId": "00ubgaSARVOQDIOXMORI",
+    "mfaActive": false
+}
+```
+
+## Session Attributes
+
+Sessions have the following attributes:
+
+Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
+--- | --- | ---	| --- | --- | --- | --- | ---
+id | unique key for the session | String | FALSE | TRUE | TRUE
+userId | unique key for the [user](users.md#get-user-with-id) | String | TRUE | FALSE | TRUE
+mfaActive | indicates whether the user has enrolled a valid MFA credential | Boolean | FALSE | FALSE | TRUE
+
+### Conditional Token Attributes
+
+The [Create Session](#create-session) operation can optionally return the following values when requested.
+
+Field | Description
+--- | ---
+cookieToken | One-time token which can be used to obtain a session cookie for your organization by visiting either an application's embed link or a session redirect URL.<br><br>See [retrieving a session cookie by visiting a session redirect link](/docs/examples/session_cookie.md#retrieving-a-session-cookie-by-visiting-a-session-redirect-link) or [retrieving a session cookie by visiting an application embed link](/docs/examples/session_cookie.md#retrieving-a-session-cookie-by-visiting-an-application-embed-link) for more info.
+cookieTokenUrl | URL for a a transparent 1x1 pixel image which contains a one-time token which when visited  sets the session cookie in your browser for your organization.<br><br>See [retrieving a session cookie by visiting a session redirect link](/docs/examples/session_cookie.md#retrieving-a-session-cookie-with-a-hidden-image) for more info.
+
 # Session Operations
 
 ## Create Session
@@ -36,15 +68,13 @@ Creates a new session for a user.
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
-additionalFields | Additional fields to include in the response | Query | comma separated list of String values | FALSE |
+additionalFields | Requests specific [token attributes](#conditional-token-attributes) | Query | comma separated list of String values | FALSE |
+username | `login` for an `ACTIVE` user | Body | String | TRUE |
+password | password for an `ACTIVE` user | Body | String | TRUE |
 
-##### Field Values
+#### Response Parameters
 
-Field | Description
---- | ---
-cookieToken | One-time token which can be used to obtain a session cookie for your organization by visiting either an application's embed link or a session redirect URL.<br><br>See [retrieving a session cookie by visiting a session redirect link](/docs/examples/session_cookie.md#retrieving-a-session-cookie-by-visiting-a-session-redirect-link) or [retrieving a session cookie by visiting an application embed link](/docs/examples/session_cookie.md#retrieving-a-session-cookie-by-visiting-an-application-embed-link) for more info.
-cookieTokenUrl | URL for a a transparent 1x1 pixel image which contains a one-time token which when visited  sets the session cookie in your browser for your organization.<br><br>See [retrieving a session cookie by visiting a session redirect link](/docs/examples/session_cookie.md#retrieving-a-session-cookie-with-a-hidden-image) for more info.
-
+The new [Session](#session-model) for the user.
 
 ### Create Session with One-Time Token 
 
@@ -146,6 +176,10 @@ Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of user's session | URL | String | TRUE |
 
+#### Response Parameters
+
+[Session](#session-model)
+
 #### Request
 
 ```sh
@@ -192,6 +226,9 @@ Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of user's session | URL | String | TRUE |
 
+#### Response Parameters
+
+[Session](#session-model)
 
 #### Request
 
@@ -239,6 +276,10 @@ Closes a session for a user (logout).
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of user's session | URL | String | TRUE |
+
+#### Response Parameters
+
+N/A
 
 #### Request
 
