@@ -17,7 +17,7 @@ The Groups API provides operations to manage your organization groups an their u
 - [Group Member Operations](#group-member-operations)
 	- [List Group Members](#list-group-members)
 	- [Add User to Group](#add-user-to-group)
-	- [Remove User from Group](#remove-user-to-group)
+	- [Remove User from Group](#remove-user-from-group)
 
 # Group Model
 
@@ -75,7 +75,7 @@ Specifies required and optional attributes for a group.  The `objectClass` of gr
 Profile for any group that is **not** imported from Active Directory
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Readonly | Default
---- | --- | ---	| --- | --- | --- | --- 
+--- | --- | ---	| --- | --- | --- | --- | --- 
 name | name of the group | String | 1 | 255 | FALSE | FALSE |
 description | description of the group | String | 0 | 1024 | TRUE | FALSE |
 
@@ -91,7 +91,7 @@ description | description of the group | String | 0 | 1024 | TRUE | FALSE |
 Profile for a group that is imported from Active Directory
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable  | Readonly | Default
---- | --- | ---	| --- | --- | --- | --- 
+--- | --- | ---	| --- | --- | --- | --- | --- 
 name | name of the windows group | String | | | FALSE | TRUE |
 description | description of the windows group | String | | | FALSE | TRUE |
 samAccountName | pre-windows 2000 name of the windows group | String | | | FALSE | TRUE |
@@ -336,7 +336,7 @@ Link: <https://your-domain.okta.com/api/v1/groups?after=00ud4tVDDXYVKPXKVLCO&lim
 	    ],
 	    "profile": {
 	        "name": "East Coast",
-	        "description": "Ready to Die" 
+	        "description": "Illmatic" 
 	    },
 	    "_links": {
 	        "logo": [
