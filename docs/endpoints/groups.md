@@ -1,12 +1,149 @@
-# Group endpoints
+# Overview
 
-## Create groups
+The Groups API provides operations to manage your organization groups an their user members.
 
-#### POST /groups
+- [Group Model](#group-model)
+	- [Group Attributes](#group-attributes)
+	- [Profile Object](#profile-object)
+	- [Links Object](#links-object)
+- [Group Operations](#group-operations)
+	- [Create Group](#create-group)
+	- [Get Group](#get-group)
+	- [List Groups](#list-groups)
+		- [List All Groups](#list-all-groups)
+		- [Search Groups](#search-groups)
+	- [Update Group](#update-group)
+	- [Delete Group](#delete-group)
+- [Group Member Operations](#group-member-operations)
+	- [List Group Members](#list-group-members)
+	- [Add User to Group](#add-user-to-group)
+	- [Remove User from Group](#remove-user-to-group)
 
-Create a group.
+# Group Model
 
-Request
+## Example
+
+```json
+{
+    "id": "00g1emaKYZTWRYYRRTSK",
+    "objectClass": [
+        "okta:user_group"
+    ],
+    "profile": {
+        "name": "Cloud Users",
+        "description": "Users that can access cloud apps"
+    },
+    "_links": {
+        "logo": [
+            {
+                "href": "https://example.okta.com/img/logos/groups/okta-medium.png",
+                "name": "medium",
+                "type": "image/png"
+            },
+            {
+                "href": "https://example.okta.com/img/logos/groups/okta-large.png",
+                "name": "large",
+                "type": "image/png"
+            }
+        ],
+        "users": {
+            "href": "https://example.okta.com/api/v1/groups/00g1emaKYZTWRYYRRTSK/users"
+        },
+        "apps": {
+            "href": "https://example.okta.com/api/v1/groups/00g1emaKYZTWRYYRRTSK/apps"
+        }
+    }
+}
+```
+
+## Group Attributes
+
+All groups have the following attributes:
+
+Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
+--- | --- | ---	| --- | --- | --- | --- | ---
+id | unique key for group | String | | | FALSE | TRUE | TRUE
+objectClass | determines the group's `profile` | Array of String | 1 | | TRUE | FALSE | TRUE
+profile | the group's profile attributes | [Profile Object](#profile-object) | | | FALSE | FALSE | FALSE
+
+## Profile Object
+
+Specifies required and optional attributes for a group.  The `objectClass` of group determines what additional attributes are available.
+
+### ObjectClass: okta:user_group
+
+Profile for any group that is **not** imported from Active Directory
+
+Attribute | Description | DataType | MinLength | MaxLength | Nullable | Readonly | Default
+--- | --- | ---	| --- | --- | --- | --- 
+name | name of the group | String | 1 | 255 | FALSE | FALSE |
+description | description of the group | String | 0 | 1024 | TRUE | FALSE |
+
+```json
+{
+    "name": "West Coast",
+    "description": "Straight Outta Compton" 
+}
+```
+
+### ObjectClass: okta:windows_security_principal 
+
+Profile for a group that is imported from Active Directory
+
+Attribute | Description | DataType | MinLength | MaxLength | Nullable  | Readonly | Default
+--- | --- | ---	| --- | --- | --- | --- 
+name | name of the windows group | String | | | FALSE | TRUE |
+description | description of the windows group | String | | | FALSE | TRUE |
+samAccountName | pre-windows 2000 name of the windows group | String | | | FALSE | TRUE |
+dn | the distinguished name of the windows group | String | | | FALSE | TRUE |
+windowsDomainQualifiedName | fully-qualified name of the windows group | String | | | FALSE | TRUE |
+externalId | base-64 encoded GUID (objectGUID) of the windows group | String | | | FALSE | TRUE |
+
+```json
+{
+    "profile": {
+        "name": "West Coast Users",
+        "description": "example.com/West Coast/West Coast Users",
+        "samAccountName": "West Coast",
+        "dn": "CN=West Coast Users,OU=West Coast,DC=example,DC=com",
+        "windowsDomainQualifiedName": "EXAMPLE\\West Coast Users",
+        "externalId": "VKzYZ1C+IkSZxIWlrW5ITg=="
+    }
+}
+```
+
+## Links Object
+
+Specifies link relations (See [Web Linking](http://tools.ietf.org/html/rfc5988)) available for the group using the [JSON Hypertext Application Language](http://tools.ietf.org/html/draft-kelly-json-hal-06) specification.  This object is used for dynamic discovery of related resources and lifecycle operations.  The Links Object is **read-only**.
+
+Relation Name | Description
+--- | ---
+self | The primary URL for the group
+logo | Provides links to logo images for the group if available
+users | Resource to manage [members](#group-member-operations) of the group
+apps | Retrieves all [applications](apps.md#application-model) that are assigned to the group. See [Application Group Operations](apps.md#application-group-operations)
+
+
+# Group Operations
+
+## Create Group
+
+Creates a new group in your Okta organization.
+
+### POST /groups
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+profile | profile for a new group | Body | [Profile-Object](#profile-object) | TRUE |
+
+#### Response Parameters
+
+All responses return the created [Group](#group-model).
+
+#### Request
+
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
@@ -15,179 +152,541 @@ curl -v -H "Authorization:SSWS yourtoken" \
 -d \
 '{
   "profile": {
-    "name": "Slytherin",
-    "description": "Cold and slimy" 
+    "name": "West Coast",
+    "description": "Straight Outta Compton" 
   }
 }' 
 ```
 
-Response
+#### Response
+
 ```json
 {
-  "id": "00gevhYMOEIQMDAPUQGQ", 
-  "profile": {
-    "name": "Slytherin",
-    "description": "Cold and slimy" 
-  }
+    "id": "00gevhYMOEIQMDAPUQGQ",
+    "objectClass": [
+        "okta:user_group"
+    ],
+    "profile": {
+        "name": "West Coast",
+        "description": "Straight Outta Compton" 
+    },
+    "_links": {
+        "logo": [
+            {
+                "href": "https://your-domain.okta.com/img/logos/groups/okta-medium.png",
+                "name": "medium",
+                "type": "image/png"
+            },
+            {
+                "href": "https://your-domain.okta.com/img/logos/groups/okta-large.png",
+                "name": "large",
+                "type": "image/png"
+            }
+        ],
+        "users": {
+            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/users"
+        },
+        "apps": {
+            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/apps"
+        }
+    }
 }
 ```
-## List groups
 
-#### GET /groups
+## Get Group
 
-##### Parameters
-**q** (Optional) Search by all or part of the group name. E.G. /groups?q=every
+### GET /groups/:id
 
-Fetch a list of groups.
+Fetches a group from your organization
 
-Request
+#### Request Parameters
+
+Fetch a specific group by id.
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+id | `id` of a group | URL | String | TRUE |
+
+#### Response Parameters
+
+Fetched [Group](#group-model)
+
+#### Request
+
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/groups 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ"
 ```
 
-Response
+#### Response
+
 ```json
+{
+    "id": "00gevhYMOEIQMDAPUQGQ",
+    "objectClass": [
+        "okta:user_group"
+    ],
+    "profile": {
+        "name": "West Coast",
+        "description": "Straight Outta Compton" 
+    },
+    "_links": {
+        "logo": [
+            {
+                "href": "https://your-domain.okta.com/img/logos/groups/okta-medium.png",
+                "name": "medium",
+                "type": "image/png"
+            },
+            {
+                "href": "https://your-domain.okta.com/img/logos/groups/okta-large.png",
+                "name": "large",
+                "type": "image/png"
+            }
+        ],
+        "users": {
+            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/users"
+        },
+        "apps": {
+            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/apps"
+        }
+    }
+}
+```
+
+## List Groups
+
+### GET /groups
+
+Fetch a list of groups from your Okta organization.
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+q | Searches the `name` attribute of groups for matching value | Query | String | FALSE |
+limit | Specifies the number of group results in a page | Query | Number | FALSE | 10000
+after | Specifies the pagination cursor for the next page of groups | Query | String | FALSE |
+
+*Note: The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+
+#### Response Parameters
+
+Array of [Groups](#group-model)
+
+### List All Groups
+
+Fetches all groups in your organization.
+
+The default group limit is set to a very high number due to historical reasons which is no longer valid for most organizations.  This will change in a future version of this API.  The recommended page limit is now `limit=200`.
+
+*Note:  If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))*
+
+#### Request
+
+```sh
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/groups?limit=200"
+```
+
+#### Response
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://your-domain.okta.com/api/v1/groups?limit=200>; rel="self"
+Link: <https://your-domain.okta.com/api/v1/groups?after=00ud4tVDDXYVKPXKVLCO&limit=200>; rel="next"
+
 [
-  {
-    "id": "0g12345678", 
-    "profile": {
-      "name": "Everyone",
-      "description": "Everyone group" 
-    }
-  }, 
-  {
-    "id": "0g12345679", 
-    "profile": {
-      "name": "Gryffindor",
-      "description": "Courageous and Bold"
-    }
-  }
+	{
+	    "id": "00gevhYMOEIQMDAPUQGQ",
+	    "objectClass": [
+	        "okta:user_group"
+	    ],
+	    "profile": {
+	        "name": "West Coast",
+	        "description": "Straight Outta Compton" 
+	    },
+	    "_links": {
+	        "logo": [
+	            {
+	                "href": "https://your-domain.okta.com/img/logos/groups/okta-medium.png",
+	                "name": "medium",
+	                "type": "image/png"
+	            },
+	            {
+	                "href": "https://your-domain.okta.com/img/logos/groups/okta-large.png",
+	                "name": "large",
+	                "type": "image/png"
+	            }
+	        ],
+	        "users": {
+	            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/users"
+	        },
+	        "apps": {
+	            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/apps"
+	        }
+	    }
+	},
+	{
+	    "id": "00gq96KPRVMTHOQAQWAC",
+	    "objectClass": [
+	        "okta:user_group"
+	    ],
+	    "profile": {
+	        "name": "East Coast",
+	        "description": "Ready to Die" 
+	    },
+	    "_links": {
+	        "logo": [
+	            {
+	                "href": "https://your-domain.okta.com/img/logos/groups/okta-medium.png",
+	                "name": "medium",
+	                "type": "image/png"
+	            },
+	            {
+	                "href": "https://your-domain.okta.com/img/logos/groups/okta-large.png",
+	                "name": "large",
+	                "type": "image/png"
+	            }
+	        ],
+	        "users": {
+	            "href": "https://your-domain.okta.com/api/v1/groups/00gq96KPRVMTHOQAQWAC/users"
+	        },
+	        "apps": {
+	            "href": "https://your-domain.okta.com/api/v1/groups/00gq96KPRVMTHOQAQWAC/apps"
+	        }
+	    }
+	}
 ]
 ```
-#### GET /groups/:id
 
-Fetch a specific group.
+### Search Groups 
 
-Request
+Searches for groups by `name`.
+
+*Note: Paging and searching are currently mutually exclusive.  You cannot page a query.  The default limit for a query is `300` results. Query is intended for an auto-complete picker use case where users will refine their search string to constrain the results.*
+
+*Note: Search currently performs a startsWith match but it should be considered an implementation detail and may change without notice in the future. Exact matches will always be returned before partial matches*
+
+#### Request
+
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/groups/0g12345679 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users?q=West&limit=1"
 ```
 
-Response
+#### Response
+
 ```json
-{
-  "id": "0g12345679", 
-  "profile": {
-    "name": "Gryffindor",
-    "description": "Courageous and Bold" 
-  }
-}
+[
+	{
+	    "id": "00gevhYMOEIQMDAPUQGQ",
+	    "objectClass": [
+	        "okta:user_group"
+	    ],
+	    "profile": {
+	        "name": "West Coast",
+	        "description": "Straight Outta Compton" 
+	    },
+	    "_links": {
+	        "logo": [
+	            {
+	                "href": "https://your-domain.okta.com/img/logos/groups/okta-medium.png",
+	                "name": "medium",
+	                "type": "image/png"
+	            },
+	            {
+	                "href": "https://your-domain.okta.com/img/logos/groups/okta-large.png",
+	                "name": "large",
+	                "type": "image/png"
+	            }
+	        ],
+	        "users": {
+	            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/users"
+	        },
+	        "apps": {
+	            "href": "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ/apps"
+	        }
+	    }
+	}
+]
 ```
-## Update groups
 
-#### PUT /users/:id
+## Update Group
 
-Update a group.
+### PUT /groups/:id
 
-Request
+Updates an Okta group's profile.
+
+*Note: Only profiles for Okta groups can be modified.*
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+id | id of the group to update | URL | String | TRUE |
+profile | Updated profile for the group | Body | [Profile Object](#profile-object) | TRUE |
+
+*Note: All profile attributes must be specified when updating a user's profile.  __Partial updates are not supported!__*
+
+#### Response Parameters
+
+Updated [Group](#group-model)
+
+#### Request
+
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/groups/0g12345679 \
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X PUT "https://your-domain.okta.com/api/v1/groups/00ub0oNGTSWTBKOLGLNR" \
 -d \
 '{
-  "profile": {
-    "name": "Hufflepuff"
-  }
-}' 
+    "profile": {
+        "name": "Ameliorate Name",
+        "description": "Amended description",
+    }
+}'
 ```
 
-Response
+#### Response
+
 ```json
 {
-  "id": "0g12345679", 
-  "profile": {
-    "name": "Hufflepuff",
-    "description": "Cold and slimy" 
-  }
+    "id": "00ub0oNGTSWTBKOLGLNR",
+    "objectClass": [
+        "okta:user_group"
+    ],
+    "profile": {
+        "name": "Ameliorate Name",
+        "description": "Amended description" 
+    },
+    "_links": {
+        "logo": [
+            {
+                "href": "https://your-domain.okta.com/img/logos/groups/okta-medium.png",
+                "name": "medium",
+                "type": "image/png"
+            },
+            {
+                "href": "https://your-domain.okta.com/img/logos/groups/okta-large.png",
+                "name": "large",
+                "type": "image/png"
+            }
+        ],
+        "users": {
+            "href": "https://your-domain.okta.com/api/v1/groups/00ub0oNGTSWTBKOLGLNR/users"
+        },
+        "apps": {
+            "href": "https://your-domain.okta.com/api/v1/groups/00ub0oNGTSWTBKOLGLNR/apps"
+        }
+    }
 }
 ```
-## Delete groups
 
-#### DELETE /groups/:id
+## Delete Group
 
-Deactivate a group.
+### DELETE /groups/:id
 
-Request
+Removes an Okta group from your organization.
+
+*Note: Only Okta groups can be removed.*
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+id | id of the group to delete | URL | String | TRUE |
+
+#### Response Parameters
+
+N/A
+
+#### Request
+
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X DELETE https://your-domain.okta.com/api/v1/groups/0g12345679 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-X DELETE "https://your-domain.okta.com/api/v1/groups/00ub0oNGTSWTBKOLGLNR"
 ```
-## Group membership operations
 
-#### GET groups/:id/users
+#### Response
 
-Fetch users that are members of the group. 
+```http
+HTTP/1.1 204 No Content
+```
 
-Request
+# Group Member Operations
+
+Operations that manage group memberships.
+
+## List Group Members
+
+### GET /groups/:id/users
+
+Fetches all [users](#users.md) that are a member of a group.
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+id | id of the group | URL | String | TRUE |
+limit | Specifies the number of user results in a page | Query | Number | FALSE | 10000
+after | Specifies the pagination cursor for the next page of users | Query | String | FALSE |
+
+*Note: The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+
+The default user limit is set to a very high number due to historical reasons which is no longer valid for most organizations.  This will change in a future version of this API.  The recommended page limit is now `limit=200`.
+
+*Note:  If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))*
+
+#### Response Parameters
+
+Array of [Users](users.md#user-model)
+
+#### Request
+
 ```sh
-curl -v -H "Authorization:SSWS yourtoken" \
--H "Accept:application/json" \
--H "Content-type:application/json" \
--X GET https://your-domain.okta.com/api/v1/groups/0g12345679/users 
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?limit=2"
 ```
 
-Response
-```json
+#### Response
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?limit=2>; rel="self"
+Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?after=00u1f9cMYQZFMPVXIDIZ&limit=200>; rel="next"
+
 [
-  {
-    "profile": {
-      "firstName": "Harry", 
-      "lastName": "Potter",
-      "email": "hpotter@4privetdrive.com",  
-      "login": "hpotter@hogwarts.edu", 
-      "mobilePhone": "555-555-5555"
+    {
+        "id": "00u1f96ECLNVOKVMUSEA",
+        "status": "ACTIVE",
+        "created": "2013-12-12T16:14:22.000Z",
+        "activated": "2013-12-12T16:14:22.000Z",
+        "statusChanged": "2013-12-12T22:14:22.000Z",
+        "lastLogin": null,
+        "profile": {
+            "firstName": "Easy",
+            "lastName": "E",
+            "email": "easy-e@example.com",
+            "login": "easy-e@example.com",
+            "mobilePhone": null
+        },
+        "credentials": {
+            "password": {}
+        },
+        "_links": {
+            "resetPassword": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/lifecycle/reset_password"
+            },
+            "changeRecoveryQuestion": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/credentials/change_recovery_question"
+            },
+            "deactivate": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/lifecycle/deactivate"
+            },
+            "changePassword": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/credentials/change_password"
+            }
+        }
+    },
+    {
+        "id": "00u1f9cMYQZFMPVXIDIZ",
+        "status": "ACTIVE",
+        "created": "2013-12-12T16:14:42.000Z",
+        "activated": "2013-12-12T16:14:42.000Z",
+        "statusChanged": "2013-12-12T16:14:42.000Z",
+        "lastLogin": "2013-12-12T18:14:42.000Z",
+        "profile": {
+            "firstName": "Dr.",
+            "lastName": "Dre",
+            "email": "dr.dre@example.com",
+            "login": "dr.dre@example.com",
+            "mobilePhone": null
+        },
+        "credentials": {
+            "password": {}
+        },
+        "_links": {
+            "resetPassword": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/lifecycle/reset_password"
+            },
+            "changeRecoveryQuestion": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/credentials/change_recovery_question"
+            },
+            "deactivate": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/lifecycle/deactivate"
+            },
+            "changePassword": {
+                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/credentials/change_password"
+            }
+        }
     }
-  }, 
-  {
-    "profile": {
-      "firstName": "Hermione", 
-      "lastName": "Granger", 
-      "email": "hgranger@gryffindor.hogwarts.edu", 
-      "login": "hgranger@hogwarts.edu", 
-      "mobilePhone": "555-555-5555"
-    }
-  }
 ]
 ```
-#### PUT /groups/:id/users/:userId
 
-Add a user to the group.
+## Add User to Group
 
-Request
+### PUT /groups/:gid/users/:uid
+
+Add a user to a group.
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+gid | id of the group | URL | String | TRUE |
+uid | id of the user | URL | String | TRUE |
+
+#### Response Parameters
+
+N/A
+
+#### Request
+
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
--H "Content-type:application/json" \
--X PUT https://your-domain.okta.com/api/v1/groups/0g12345679/users/0uh4rryp0tter
+-X PUT https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users/00u1f96ECLNVOKVMUSEA
 ```
-#### DELETE /groups/:id/users/:userId
+#### Response
 
-Remove a user from the group.
+```http
+HTTP/1.1 204 No Content
+```
 
-Request 
+## Remove User from Group
+
+### DELETE /groups/:gid/users/:uid
+
+Remove a user from a group.
+
+#### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+gid | id of the group | URL | String | TRUE |
+uid | id of the user | URL | String | TRUE |
+
+#### Response Parameters
+
+N/A
+
+#### Request
+
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
--H "Content-type:application/json" \
--X DELETE https://your-domain.okta.com/api/v1/groups/0g12345679/users/0uh4rryp0tt3r
+-X DELETE https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users/00u1f96ECLNVOKVMUSEA
+```
+#### Response
+
+```http
+HTTP/1.1 204 No Content
 ```
