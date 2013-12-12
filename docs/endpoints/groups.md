@@ -90,14 +90,14 @@ description | description of the group | String | 0 | 1024 | TRUE | FALSE |
 
 Profile for a group that is imported from Active Directory
 
-Attribute | Description | DataType | MinLength | MaxLength | Nullable  | Readonly | Default
---- | --- | ---	| --- | --- | --- | --- | --- 
-name | name of the windows group | String | | | FALSE | TRUE |
-description | description of the windows group | String | | | FALSE | TRUE |
-samAccountName | pre-windows 2000 name of the windows group | String | | | FALSE | TRUE |
-dn | the distinguished name of the windows group | String | | | FALSE | TRUE |
-windowsDomainQualifiedName | fully-qualified name of the windows group | String | | | FALSE | TRUE |
-externalId | base-64 encoded GUID (objectGUID) of the windows group | String | | | FALSE | TRUE |
+Attribute | Description | DataType | Nullable  | Readonly | Default
+--- | --- | ---	| --- | --- | --- 
+name | name of the windows group | String | FALSE | TRUE |
+description | description of the windows group | String | FALSE | TRUE |
+samAccountName | pre-windows 2000 name of the windows group | String | FALSE | TRUE |
+dn | the distinguished name of the windows group | String | FALSE | TRUE |
+windowsDomainQualifiedName | fully-qualified name of the windows group | String | FALSE | TRUE |
+externalId | base-64 encoded GUID (objectGUID) of the windows group | String | FALSE | TRUE |
 
 ```json
 {
