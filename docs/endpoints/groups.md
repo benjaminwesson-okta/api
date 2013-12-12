@@ -583,16 +583,16 @@ Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?aft
         },
         "_links": {
             "resetPassword": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/lifecycle/reset_password"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f96ECLNVOKVMUSEA/lifecycle/reset_password"
             },
             "changeRecoveryQuestion": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/credentials/change_recovery_question"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f96ECLNVOKVMUSEA/credentials/change_recovery_question"
             },
             "deactivate": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/lifecycle/deactivate"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f96ECLNVOKVMUSEA/lifecycle/deactivate"
             },
             "changePassword": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f96ECLNVOKVMUSEA/credentials/change_password"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f96ECLNVOKVMUSEA/credentials/change_password"
             }
         }
     },
@@ -615,16 +615,16 @@ Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?aft
         },
         "_links": {
             "resetPassword": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/lifecycle/reset_password"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f9cMYQZFMPVXIDIZ/lifecycle/reset_password"
             },
             "changeRecoveryQuestion": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/credentials/change_recovery_question"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f9cMYQZFMPVXIDIZ/credentials/change_recovery_question"
             },
             "deactivate": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/lifecycle/deactivate"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f9cMYQZFMPVXIDIZ/lifecycle/deactivate"
             },
             "changePassword": {
-                "href": "http://rain.okta1.com:1802/api/v1/users/00u1f9cMYQZFMPVXIDIZ/credentials/change_password"
+                "href": "https://your-domain.okta.com/api/v1/users/00u1f9cMYQZFMPVXIDIZ/credentials/change_password"
             }
         }
     }
