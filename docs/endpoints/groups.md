@@ -5,19 +5,21 @@ The Groups API provides operations to manage your organization groups an their u
 - [Group Model](#group-model)
 	- [Group Attributes](#group-attributes)
 	- [Profile Object](#profile-object)
-	- [Links Object](#links-object)
+	- [Links](#links)
 - [Group Operations](#group-operations)
-	- [Create Group](#create-group)
+	- [Add Group](#add-group)
 	- [Get Group](#get-group)
 	- [List Groups](#list-groups)
 		- [List All Groups](#list-all-groups)
 		- [Search Groups](#search-groups)
 	- [Update Group](#update-group)
-	- [Delete Group](#delete-group)
+	- [Remove Group](#remove-group)
 - [Group Member Operations](#group-member-operations)
 	- [List Group Members](#list-group-members)
 	- [Add User to Group](#add-user-to-group)
 	- [Remove User from Group](#remove-user-from-group)
+- [Related Resources](#related-resources)
+	- [List Assigned Applications](#list-assigned-applications)
 
 # Group Model
 
@@ -65,6 +67,9 @@ Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique |
 id | unique key for group | String | | | FALSE | TRUE | TRUE
 objectClass | determines the group's `profile` | Array of String | 1 | | TRUE | FALSE | TRUE
 profile | the group's profile attributes | [Profile Object](#profile-object) | | | FALSE | FALSE | FALSE
+_links | [discoverable resources](#links-object) related to the group | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06) | | | TRUE | FALSE | TRUE
+
+*Note: id, objectClass, and _links are only available after a group is created*
 
 ## Profile Object
 
@@ -120,27 +125,28 @@ Relation Name | Description
 --- | ---
 self | The primary URL for the group
 logo | Provides links to logo images for the group if available
-users | Resource to manage [members](#group-member-operations) of the group
-apps | Retrieves all [applications](apps.md#application-model) that are assigned to the group. See [Application Group Operations](apps.md#application-group-operations)
-
+users | Provides [group member operations](#group-member-operations) for the group
+apps | Lists all [applications](apps.md#application-model) that are assigned to the group. See [Application Group Operations](apps.md#application-group-operations)
 
 # Group Operations
 
-## Create Group
+## Add Group
 
-Creates a new group in your Okta organization.
+Adds a new Okta group to your organization.
+
+*Note: Only Okta groups can be added.  Application import operations are responsible for syncing non-Okta groups such as Active Directory groups.*
 
 ### POST /groups
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
-profile | profile for a new group | Body | [Profile-Object](#profile-object) | TRUE |
+profile | `okta:user_group` profile for a new group | Body | [Profile-Object](#profile-object) | TRUE |
 
 #### Response Parameters
 
-All responses return the created [Group](#group-model).
+The created [Group](#group-model).
 
 #### Request
 
@@ -197,13 +203,11 @@ curl -v -H "Authorization:SSWS yourtoken" \
 
 ### GET /groups/:id
 
-Fetches a group from your organization
+Fetches a specific group from your organization
 
 #### Request Parameters
 
-Fetch a specific group by id.
-
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | `id` of a group | URL | String | TRUE |
 
@@ -258,11 +262,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
 
 ### GET /groups
 
-Fetch a list of groups from your Okta organization.
+Fetch a list of groups from your organization.
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 q | Searches the `name` attribute of groups for matching value | Query | String | FALSE |
 limit | Specifies the number of group results in a page | Query | Number | FALSE | 10000
@@ -364,7 +368,7 @@ Link: <https://your-domain.okta.com/api/v1/groups?after=00ud4tVDDXYVKPXKVLCO&lim
 
 ### Search Groups 
 
-Searches for groups by `name`.
+Searches for groups by `name` in your organization.
 
 *Note: Paging and searching are currently mutually exclusive.  You cannot page a query.  The default limit for a query is `300` results. Query is intended for an auto-complete picker use case where users will refine their search string to constrain the results.*
 
@@ -425,7 +429,7 @@ Updates an Okta group's profile.
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of the group to update | URL | String | TRUE |
 profile | Updated profile for the group | Body | [Profile Object](#profile-object) | TRUE |
@@ -487,17 +491,17 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## Delete Group
+## Remove Group
 
 ### DELETE /groups/:id
 
 Removes an Okta group from your organization.
 
-*Note: Only Okta groups can be removed.*
+*Note: Only Okta groups can be removed.  Application import operations are responsible for syncing non-Okta groups such as Active Directory groups.*
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of the group to delete | URL | String | TRUE |
 
@@ -527,11 +531,11 @@ Operations that manage group memberships.
 
 ### GET /groups/:id/users
 
-Fetches all [users](#users.md) that are a member of a group.
+Fetches all [users](#users.md) that are a member of an Okta group or an application imported group.
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of the group | URL | String | TRUE |
 limit | Specifies the number of user results in a page | Query | Number | FALSE | 10000
@@ -635,11 +639,13 @@ Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?aft
 
 ### PUT /groups/:gid/users/:uid
 
-Add a user to a group.
+Adds an [Okta user](users.md#user-model) from an Okta group.
+
+*Note: You can only manage Okta-mastered group memberships.  Application import operations are responsible for syncing non-Okta group memberships such as Active Directory groups.*
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 gid | id of the group | URL | String | TRUE |
 uid | id of the user | URL | String | TRUE |
@@ -665,11 +671,13 @@ HTTP/1.1 204 No Content
 
 ### DELETE /groups/:gid/users/:uid
 
-Remove a user from a group.
+Removes an [Okta user](users.md#user-model) from an Okta group.
+
+*Note: You can only manage Okta-mastered group memberships.  Application import operations are responsible for syncing non-Okta group memberships such as Active Directory groups.*
 
 #### Request Parameters
 
-Parameter | Description | Param Type | DataType | Required | Default
+Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 gid | id of the group | URL | String | TRUE |
 uid | id of the user | URL | String | TRUE |
@@ -690,3 +698,156 @@ curl -v -H "Authorization:SSWS yourtoken" \
 ```http
 HTTP/1.1 204 No Content
 ```
+
+# Related Resources    
+
+## List Assigned Applications
+
+Lists all [applications](apps.md#application-model) that are assigned to the group. See [Application Group Operations](apps.md#application-group-operations)
+
+### GET /groups/:id/apps
+
+#### Request Parameters
+
+Parameter | Description | ParamType | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+id | id of the group | URL | String | TRUE |
+limit | Specifies the number of app results for a page | Query | Number | FALSE | 20
+after | Specifies the pagination cursor for the next page of apps | Query | String | FALSE |
+
+*Note: The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+
+#### Response Parameters
+
+Array of [Applications](apps.md#application-model)
+
+#### Request
+
+```sh
+curl -v -H "Authorization:SSWS yourtoken" \
+-H "Accept:application/json" \
+-X GET https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/apps
+```
+
+#### Response
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/apps>; rel="self"
+Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/apps?after=0oafxqCAJWWGELFTYASJ>; rel="next"
+
+[
+ {
+        "id": "0oafwvZDWJKVLDCUWUAC",
+        "name": "template_basic_auth",
+        "label": "Sample Basic Auth App",
+        "status": "ACTIVE",
+        "lastUpdated": "2013-09-30T00:56:52.000Z",
+        "created": "2013-09-30T00:56:52.000Z",
+        "accessibility": {
+            "selfService": false,
+            "errorRedirectUrl": null
+        },
+        "visibility": {
+            "autoSubmitToolbar": false,
+            "hide": {
+                "iOS": false,
+                "web": false
+            },
+            "appLinks": {
+                "login": true
+            }
+        },
+        "features": [],
+        "signOnMode": "BASIC_AUTH",
+        "credentials": {
+            "scheme": "EDIT_USERNAME_AND_PASSWORD",
+            "userNameTemplate": {
+                "template": "${source.login}",
+                "type": "BUILT_IN"
+            }
+        },
+        "settings": {
+            "app": {
+                "url": "https://example.com/login.html",
+                "authURL": "https://example.com/auth.html"
+            }
+        },
+        "_links": {
+            "appLinks": [
+                {
+                    "href": "https://your-domain.okta.com/home/template_basic_auth/0oafwvZDWJKVLDCUWUAC/1438",
+                    "name": "login",
+                    "type": "text/html"
+                }
+            ],
+            "users": {
+                "href": "https://your-domain.okta.com/api/v1/apps/0oafwvZDWJKVLDCUWUAC/users"
+            },
+            "deactivate": {
+                "href": "https://your-domain.okta.com/api/v1/apps/0oafwvZDWJKVLDCUWUAC/lifecycle/deactivate"
+            },
+            "groups": {
+                "href": "https://your-domain.okta.com/api/v1/apps/0oafwvZDWJKVLDCUWUAC/groups"
+            }
+        }
+    },
+    {
+        "id": "0oafxqCAJWWGELFTYASJ",
+        "name": "bookmark",
+        "label": "Sample Bookmark App",
+        "status": "ACTIVE",
+        "lastUpdated": "2013-10-02T22:06:24.000Z",
+        "created": "2013-10-01T04:22:27.000Z",
+        "accessibility": {
+            "selfService": false,
+            "errorRedirectUrl": null
+        },
+        "visibility": {
+            "autoSubmitToolbar": false,
+            "hide": {
+                "iOS": false,
+                "web": false
+            },
+            "appLinks": {
+                "login": true
+            }
+        },
+        "features": [],
+        "signOnMode": "BOOKMARK",
+        "credentials": {
+            "userNameTemplate": {
+                "template": "${user.firstName}",
+                "type": "CUSTOM"
+            }
+        },
+        "settings": {
+            "app": {
+                "requestIntegration": false,
+                "url": "https://example.com/bookmark.htm"
+            }
+        },
+        "_links": {
+            "appLinks": [
+                {
+                    "href": "https://your-domain.okta.com/home/bookmark/0oafxqCAJWWGELFTYASJ/1280",
+                    "name": "login",
+                    "type": "text/html"
+                }
+            ],
+            "users": {
+                "href": "https://your-domain.okta.com/api/v1/apps/0oafxqCAJWWGELFTYASJ/users"
+            },
+            "deactivate": {
+                "href": "https://your-domain.okta.com/api/v1/apps/0oafxqCAJWWGELFTYASJ/lifecycle/deactivate"
+            },
+            "groups": {
+                "href": "https://your-domain.okta.com/api/v1/apps/0oafxqCAJWWGELFTYASJ/groups"
+            }
+        }
+    }
+]
+```
+    
+
