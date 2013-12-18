@@ -7,6 +7,7 @@
 - [Authentication](#authentication)
 - [Pagination](#pagination)
 	- [Link Header](#link-header)
+- [Rate Limiting](#rate-limiting)
 
 ## Versioning
 
@@ -179,3 +180,26 @@ Object whose property names are link relation types (as defined by [RFC5988](htt
     }
 }
 ```
+
+## Rate Limiting
+
+The number of API requests per-second for an organization is limited for all APIs based on your edition. 
+
+The following three headers are set in each response:
+
+`X-Rate-Limit-Limit` - the rate limit ceiling that is applicable for the current request.
+
+`X-Rate-Limit-Remaining` - the number of requests left for the current rate-limit window.
+
+`X-Rate-Limit-Reset` - the remaining time in the current rate-limit window before the rate limit resets, in UTC epoch seconds.
+
+```http
+HTTP/1.1 200 OK
+X-RateLimit-Limit: 75
+X-RateLimit-Remaining: 99
+X-RateLimit-Reset: 1366037820
+```
+
+If the rate limit is exceeded, an HTTP 429 Status Code is returned.
+
+**Rate Limits are currently not enforced. The headers are returned for information only.  Enforcement will be rolled out on a per-org basis for existing API users**
