@@ -379,7 +379,7 @@ Searches for groups by `name` in your organization.
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
--X GET "https://your-domain.okta.com/api/v1/users?q=West&limit=1"
+-X GET "https://your-domain.okta.com/api/v1/groups?q=West&limit=1"
 ```
 
 #### Response
