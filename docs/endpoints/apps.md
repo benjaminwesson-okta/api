@@ -38,6 +38,10 @@ __This API is currently in `Beta` status and documentation is *draft* quality.  
 		- [Add WS-Federation Application](#add-ws-federation-application)
 	- [Get Application](#get-application)
 	- [List Applications](#list-applications)
+	- [List Applications Assigned to User](#list-applications-assigned-to-user)
+		- [List Applications with Defaults](#list-applications-with-defaults)
+		- [List Applications Assigned to User](#list-applications-assigned-to-user)
+		- [List Applications Assigned to Group](#list-applications-assigned-to-group)
 	- [Update Application](#update-application)
 		- [Set SWA User-Editable UserName & Password](#set-swa-user-editable-username--password)
 		- [Set SWA User-Editable Password](#set-swa-user-editable-password)
@@ -149,7 +153,7 @@ credentials | credentials for the specified `signOnMode` | [Application Credenti
 settings | settings for app ([App Names & Settings](#app-names--settings))| | | | TRUE | FALSE | FALSE
 _links | discoverable resources related to the app | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06) | | | TRUE | FALSE | TRUE
 
-*Note: id, created, lastUpdated, and status are only available after an app is created*
+*Note: id, created, lastUpdated, status, and _links are only available after an app is created*
 
 ### App Names & Settings
 
@@ -1112,14 +1116,26 @@ Fetch a list of apps from your Okta organization.
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 limit | Specified the number of results for a page | Query | Number | FALSE | 20
-filter | Filters apps by `status` expression | Query | String | FALSE | status eq "ACTIVE" or status eq "INACTIVE"
+filter | Filters apps by `status`, `user.id`, or `group.id` expression | Query | String | FALSE |
 after | Specifies the pagination cursor for the next page of apps | Query | String | FALSE |
 
 *Note: The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
 
+##### Filters
+The following filters are supported with the filter query parameter:
+
+Filter | Description
+--- | --- 
+`status eq "ACTIVE"` | Apps that have a `status` of `ACTIVE`
+`status eq "INACTIVE"` | Apps that have a `status` of `INACTIVE`
+`user.id eq ":uid"` | Apps assigned to a specific user such as `00ucw2RPGIUNTDQOYPOF`
+`group.id eq ":gid"` | Apps assigned to a specific group such as `00gckgEHZXOUDGDJLYLG`
+
+*Note: Only a single expression is supported as this time*
+
 #### Response Parameters
 
-Array of [Application](#application-model)
+Array of [Applications](#application-model)
 
 ### List Applications with Defaults
 
@@ -1251,6 +1267,206 @@ curl -v -H "Authorization: SSWS yourtoken" \
     }
 ]
 ```
+
+### List Applications Assigned to User
+
+#### Request
+
+```sh
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/apps?filter=user.id+eq+\"00ucw2RPGIUNTDQOYPOF\""
+```
+
+#### Response
+
+```json
+[
+    {
+        "id": "0oabizCHPNYALCHDUIOD",
+        "name": "template_saml_2_0",
+        "label": "Example SAML App",
+        "status": "ACTIVE",
+        "lastUpdated": "2013-09-19T22:57:23.000Z",
+        "created": "2013-09-10T23:52:31.000Z",
+        "accessibility": {
+            "selfService": false,
+            "errorRedirectUrl": null
+        },
+        "visibility": {
+            "autoSubmitToolbar": false,
+            "hide": {
+                "iOS": false,
+                "web": false
+            },
+            "appLinks": {
+                "login": true
+            }
+        },
+        "features": [],
+        "signOnMode": "SAML_2_0",
+        "credentials": {
+            "userNameTemplate": {
+                "template": "${source.login}",
+                "type": "BUILT_IN"
+            }
+        },
+        "settings": {
+            "app": {
+                "audienceRestriction": "https://example.com/tenant/123",
+                "groupName": null,
+                "forceAuthn": false,
+                "defaultRelayState": null,
+                "postBackURL": "https://example.com/sso/saml",
+                "authnContextClassRef": "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport",
+                "configuredIssuer": null,
+                "requestCompressed": "COMPRESSED",
+                "groupFilter": null,
+                "recipient": "https://example.com/sso/saml",
+                "signAssertion": "SIGNED",
+                "destination": "https://example.com/sso/saml",
+                "signResponse": "SIGNED",
+                "nameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+                "attributeStatements": null
+            }
+        },
+        "_links": {
+            "users": {
+                "href": "https://example.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD/users"
+            },
+            "self": {
+                "href": "https://example.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD"
+            },
+            "metadata": {
+                "href": "https://example.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD/sso/saml/metadata"
+            },
+            "deactivate": {
+                "href": "https://example.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD/lifecycle/deactivate"
+            }
+        }
+    },
+    {
+        "id": "0oabkvBLDEKCNXBGYUAS",
+        "name": "template_swa",
+        "label": "Sample Plugin App",
+        "status": "ACTIVE",
+        "lastUpdated": "2013-09-11T17:58:54.000Z",
+        "created": "2013-09-11T17:46:08.000Z",
+        "accessibility": {
+            "selfService": false,
+            "errorRedirectUrl": null
+        },
+        "visibility": {
+            "autoSubmitToolbar": false,
+            "hide": {
+                "iOS": false,
+                "web": false
+            },
+            "appLinks": {
+                "login": true
+            }
+        },
+        "features": [],
+        "signOnMode": "BROWSER_PLUGIN",
+        "credentials": {
+            "scheme": "EDIT_USERNAME_AND_PASSWORD",
+            "userNameTemplate": {
+                "template": "${source.login}",
+                "type": "BUILT_IN"
+            }
+        },
+        "settings": {
+            "app": {
+                "buttonField": "btn-login",
+                "passwordField": "txtbox-password",
+                "usernameField": "txtbox-username",
+                "url": "https://example.com/login.html"
+            }
+        },
+        "_links": {
+            "users": {
+                "href": "https://example.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS/users"
+            },
+            "self": {
+                "href": "https://example.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS"
+            },
+            "deactivate": {
+                "href": "https://example.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS/lifecycle/deactivate"
+            }
+        }
+    }
+]
+```
+
+### List Applications Assigned to Group
+
+#### Request
+
+```sh
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/apps?filter=group.id+eq+\"00gckgEHZXOUDGDJLYLG\""
+```
+
+#### Response
+
+```json
+[
+       {
+        "id": "0oabkvBLDEKCNXBGYUAS",
+        "name": "template_swa",
+        "label": "Sample Plugin App",
+        "status": "ACTIVE",
+        "lastUpdated": "2013-09-11T17:58:54.000Z",
+        "created": "2013-09-11T17:46:08.000Z",
+        "accessibility": {
+            "selfService": false,
+            "errorRedirectUrl": null
+        },
+        "visibility": {
+            "autoSubmitToolbar": false,
+            "hide": {
+                "iOS": false,
+                "web": false
+            },
+            "appLinks": {
+                "login": true
+            }
+        },
+        "features": [],
+        "signOnMode": "BROWSER_PLUGIN",
+        "credentials": {
+            "scheme": "EDIT_USERNAME_AND_PASSWORD",
+            "userNameTemplate": {
+                "template": "${source.login}",
+                "type": "BUILT_IN"
+            }
+        },
+        "settings": {
+            "app": {
+                "buttonField": "btn-login",
+                "passwordField": "txtbox-password",
+                "usernameField": "txtbox-username",
+                "url": "https://example.com/login.html"
+            }
+        },
+        "_links": {
+            "users": {
+                "href": "https://example.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS/users"
+            },
+            "self": {
+                "href": "https://example.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS"
+            },
+            "deactivate": {
+                "href": "https://example.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS/lifecycle/deactivate"
+            }
+        }
+    }
+]
+```
+
 
 ## Update Application
 
