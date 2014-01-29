@@ -196,7 +196,7 @@ The following three headers are set in each response:
 ```http
 HTTP/1.1 200 OK
 X-RateLimit-Limit: 75
-X-RateLimit-Remaining: 99
+X-RateLimit-Remaining: 70
 X-RateLimit-Reset: 1366037820
 ```
 
