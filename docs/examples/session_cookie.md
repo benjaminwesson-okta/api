@@ -10,8 +10,7 @@ This scenario is ideal for deployment scenarios where you have implemented both 
 
 The generated one-time token along with the URL for your landing page can then be used to complete the following [URI Template](http://tools.ietf.org/html/rfc6570) `https://your-subdomain.okta.com/login/sessionCookieRedirect?token={cookieToken}&redirectUrl={redirectUrl}` that will retrieve a session cookie for a user's browser when visited.
 
-*Note: The one-time token may only be used **once** to establish a session.  If the session expires or the user logs out of Okta after using the token, they will not be able to reuse the same one-time token to get a new session cookie.*
-
+> The one-time token may only be used **once** to establish a session.  If the session expires or the user logs out of Okta after using the token, they will not be able to reuse the same one-time token to get a new session cookie.
 
 ### Validate credentials & retrieve a one-time token
 
@@ -51,23 +50,26 @@ Content-Type: application/json
 After your login flow is complete you often need to establish a session cookie for your own application as well as a session cookie for Okta before visiting your landing page.  This is accomplished by returning a HTTP redirect status code for the login response that includes both your app's session cookie as well as the completed URI template with the one-time token for the Okta session redirect URL:
 `https://your-subdomain.okta.com/login/sessionCookieRedirect?token={cookieToken}&redirectUrl={redirectUrl}` 
 
-*Note: Only the Okta session redirect URL with one-time token is required*
+> Only the Okta session redirect URL with one-time token is required
 
 ```HTTP
 HTTP/1.1 302 Moved Temporarily
 Set-Cookie: my_app_session_cookie_name=my_apps_session_cookie_value; Path=/
-Location: https://your-subdomain.okta.com/login/sessionCookieRedirect?token=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6&redirectUrl=https%3A%2F%2Fwww.example.com%2Fportal%2Fhome```
-The user's browser will set your app's session cookie and follow the redirect to Okta.  Okta will validate the one-time token and return a 302 status response that sets a session cookie for Okta and redirects the user's browser back to your landing page.  After the page has loaded the user will have an active session with Okta and will be able to SSO into their applications until the session is expired or the user closes the session (logout) or browser application.
+Location: https://your-subdomain.okta.com/login/sessionCookieRedirect?token=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6&redirectUrl=https%3A%2F%2Fwww.example.com%2Fportal%2Fhome
+```
+The user's browser will set your app's session cookie and follow the redirect to Okta.  Okta will validate the one-time token and return a 302 status response that sets a session cookie for Okta and redirects the user's browser back to your landing page.  After the page has loaded the user will have an active session with Okta and will be able to SSO into their applications until the session is expired or the user closes the session (logout) or browser application.
 
 ```http
 GET /login/sessionCookieRedirect?token=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6&redirectUrl=https%3A%2F%2Fwww.example.com%2Fportal%2Fhome HTTP/1.1
 Host: your-subdomain.okta.com
 Accept: */*
-```
+```
+
 ```HTTP
 HTTP/1.1 302 Moved Temporarily
 Set-Cookie: sid=000aC_z7AZKTpSqtHFc0Ak6Vg; Path=/
-Location: https://www.example.com/portal/home```
+Location: https://www.example.com/portal/home
+```
 
 ## Retrieving a session cookie by visiting an application embed link
 
@@ -75,7 +77,7 @@ This scenario is ideal for deployment scenarios where you have a custom login pa
 
 The generated one-time token can than be passed as a query parameter to an Okta application's embed link that will set a session cookie as well as launch the application in a single web request.
 
-*Note: The one-time token may only be used **once** to establish a session.  If the session expires or the user logs out of Okta after using the token, they will not be able to reuse the same one-time token to get a new session cookie.*
+> The one-time token may only be used **once** to establish a session.  If the session expires or the user logs out of Okta after using the token, they will not be able to reuse the same one-time token to get a new session cookie.
 
 ### Validate credentials & retrieve a one-time token
 
@@ -116,11 +118,17 @@ After your login flow is complete you can launch an Okta application for the use
 
 ```http
 HTTP/1.1 302 Moved Temporarily
-Location: https://your-subdomain/app/google/go1013td3mXAQOJCHEHQ/mail?onetimetoken=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6```When the link is visited, the token in the request will be used to initiate the user's session before processing the application launch request. A session cookie will be set in the browser and the user will have an active session with Okta and will be able to SSO into additional applications until the session is expired or the user closes the session (logout) or browser application.```HTTP
+Location: https://your-subdomain/app/google/go1013td3mXAQOJCHEHQ/mail?onetimetoken=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6
+```
+
+When the link is visited, the token in the request will be used to initiate the user's session before processing the application launch request. A session cookie will be set in the browser and the user will have an active session with Okta and will be able to SSO into additional applications until the session is expired or the user closes the session (logout) or browser application.
+
+```HTTP
 HTTP/1.1 302 Moved Temporarily
 Set-Cookie: sid=000aC_z7AZKTpSqtHFc0Ak6Vg; Path=/
-Location: https://mail.google.com/a/your-subdomain```
-*Note: The HTTP response will vary depending on the specific Okta application but will always contain a `Set-Cookie` header.*
+Location: https://mail.google.com/a/your-subdomain
+```
+> The HTTP response will vary depending on the specific Okta application but will always contain a `Set-Cookie` header.
 
 ### Initiate a SAML SSO with the one-time token
 
@@ -130,9 +138,12 @@ that contains the the one-time token as query parameter `onetimetoken`.
 ```http
 GET /app/template_saml_2_0/kbiyMOIMHNLGHJNCBURM/sso/saml?RelayState=%2Fsome%2Fdeep%2Flink&onetimetoken=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6 HTTP/1.1
 Host: your-subdomain.okta.com
-Accept: */*```When the link is visited, the token in the request will be used to initiate the user's session before processing the SAML SSO request. A session cookie will be set in the browser and the user will have an active session with Okta and will be able to SSO into additional applications until the session is expired or the user closes the session (logout) or browser application.
+Accept: */*
+```
+
+When the link is visited, the token in the request will be used to initiate the user's session before processing the SAML SSO request. A session cookie will be set in the browser and the user will have an active session with Okta and will be able to SSO into additional applications until the session is expired or the user closes the session (logout) or browser application.
  
-```HTTP
+```HTTP
 HTTP/1.1 200 OK
 Content-Type: text/html;charset=utf-8
 Set-Cookie: sid=000aC_z7AZKTpSqtHFc0Ak6Vg; Path=/
@@ -153,21 +164,24 @@ Set-Cookie: sid=000aC_z7AZKTpSqtHFc0Ak6Vg; Path=/
 	    </script>
 	</div>
 </body>
-</html>```
-### Initiate a WS-Federation SSO with the one-time token
-You can also use the same [flow as SAML](#initiate-a-saml-sso-with-the-one-time-token) for template WS-Federation application as well by passing the one-time token as query parameter `onetimetoken`.```http
+</html>
+```
+### Initiate a WS-Federation SSO with the one-time token
+
+You can also use the same [flow as SAML](#initiate-a-saml-sso-with-the-one-time-token) for template WS-Federation application as well by passing the one-time token as query parameter `onetimetoken`.
+
+```http
 GET /app/template_wsfed/k9x69oiKYSUWMIYZBKTY/sso/wsfed/passive?wa=wsignin1.0&wtrealm=https%3A%2F%2Fexample.com%2FApp%2F&wctx=rm%3D0%26id%3Dpassive%26ru%3D%2FApp%2FHome%2FAbout&onetimetoken=009Db9G6Sc8o8VfE__SlGj4FPxaG63Wm89TpJnaDF6 HTTP/1.1
 Host: your-subdomain.okta.com
 Accept: */*
 ```
 
-# Retrieving a session cookie with a hidden image
+## Retrieving a session cookie with a hidden image
 
 This flow uses a browser trick to establish a session by setting a cookie when retrieving a transparent 1x1 image with a one-time token.  Your login page will typically collect the user's credentials via a HTML form submit or POST and validate the credentials against your Okta organization by calling the [Create Session](docs/endpoints/sessions.md#create-session-with-embed-image-url) API to obtain a session cookie image URL with a one-time token. 
 
-*Note: This flow is now deprecated as some major browser vendors such as Safari block cookies from 3rd-party sites by default.  Please use an alternative flow as browser vendors are increasingly blocking cookies from 3rd party sites by default*
- 
- 
+> This flow is now deprecated as some major browser vendors such as Safari block cookies from 3rd-party sites by default.  Please use an alternative flow as browser vendors are increasingly blocking cookies from 3rd party sites by default
+
 ### Validate credentials & retrieve a session cookie image URL
 
 When processing a user's login request in your web application, retrieve a session cookie image URL by passing the user's credentials with the `cookieTokenUrl` additionalFields query param to the [Create Session](/docs/endpoints/sessions.md#create-session-with-embed-image-url) endpoint.

@@ -1,4 +1,6 @@
-# Overview
+# Apps
+
+## Overview
 
 The Application API provides operations to manage applications and/or assignments to users or groups for your organization.
 
@@ -64,9 +66,9 @@ __This API is currently in `Beta` status and documentation is *draft* quality.  
 	- [Remove Group from Application](#remove-group-from-application)
 
 
-# Application Model
+## Application Model
 
-## Example
+### Example
 
 ```json
 {
@@ -134,7 +136,7 @@ __This API is currently in `Beta` status and documentation is *draft* quality.  
 }
 ```
 
-## Application Attributes
+### Application Attributes
 All applications have the following attributes:
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
@@ -153,9 +155,9 @@ credentials | credentials for the specified `signOnMode` | [Application Credenti
 settings | settings for app ([App Names & Settings](#app-names--settings))| | | | TRUE | FALSE | FALSE
 _links | discoverable resources related to the app | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06) | | | TRUE | FALSE | TRUE
 
-*Note: id, created, lastUpdated, status, and _links are only available after an app is created*
+> `id`, `created`, `lastUpdated`, `status`, and `_links` are only available after an app is created
 
-### App Names & Settings
+#### App Names & Settings
 
 The Okta Application Network (OAN) defines the catalog of applications that can be added to your Okta organization.  Each application has a unique name (key) and schema that defines the required and optional settings for the application.  When adding an application, the unique app name must be specified in the request as well as any required settings.
 
@@ -173,9 +175,9 @@ template_wsfed | [Add WS-Federation Application](#add-ws-federation-application)
 
 The current workaround is to manually configure the desired application via the Administration UI in a preview (sandbox) organization and view the application via [Get Application](#get-application)
 
-*Note: As previously stated, this endpoint currently doesn't support creating or managing apps with user management features*
+> As previously stated, this endpoint currently doesn't support creating or managing apps with user management features
 
-### Features
+#### Features
 
 Applications may support optional features. Most apps only support sign-on and do not allow additional features.  *Note:  At this time additional features may not be configured via the API*
 
@@ -192,7 +194,8 @@ The list of possible features an app may support are:
 
 This setting modifies the same settings as the `User Management` tab when editing an application in your Okta Administration app.
 
-### SignOn Modes
+#### SignOn Modes
+
 Applications support a limited set of sign-on modes that specify how a user is authenticated to the app.
 
 The list of possible modes an app may support are:  
@@ -208,7 +211,8 @@ WS_FEDERATION | Federated Authentication with WS-Federation Passive Requestor Pr
 
 This setting modifies the same settings as the `Sign On` tab when editing an application in your Okta Administration app.
 
-## Accessibility Object
+### Accessibility Object
+
 Specifies access settings for the application.
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable  | Default
@@ -225,7 +229,8 @@ errorRedirectUrl | Custom error page for this application | String | | | TRUE | 
 }    
 ```
 
-## Visibility Object
+### Visibility Object
+
 Specifies visibility settings for the application.
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Default
@@ -249,17 +254,19 @@ appLinks | Displays specific appLinks for the app | [AppLinks Object](#applinks-
 }
 ```
 
-### Hide Object
+#### Hide Object
 
 Attribute | Description | DataType | Nullable | Default
 --- | --- | ---	| --- | ---
 iOS | Okta Mobile for iOS | Boolean | FALSE | FALSE
 web | Okta Web Browser Home Page | Boolean | FALSE | FALSE
 
-### AppLinks Object
+#### AppLinks Object
+
 Each application defines 1 or more appLinks that can be published. AppLinks can be disabled by setting the link value to ```false```.
 
-## Application Credentials Object
+### Application Credentials Object
+
 Specifies app credentials and vaulting for the application.
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Default
@@ -283,7 +290,7 @@ password | Shared password for app | [Password Object](#password-object) | | | T
 }   
 ```
 
-### Authentication Schemes
+#### Authentication Schemes
 
 Apps that are configured with the ```BASIC_AUTH```, ```BROWSER_PLUGIN```, or ```SECURE_PASSWORD_STORE``` have credentials vaulted by Okta and can be configured with the following schemes:
 
@@ -294,9 +301,9 @@ EXTERNAL_PASSWORD_SYNC	| Administrator sets username, password is the same as us
 EDIT_USERNAME_AND_PASSWORD	| User sets username and password | | | Admin/User:R/W | Admin/User:W
 EDIT_PASSWORD_ONLY	| Administrator sets username, user sets password | | | Admin:R/W | Admin/User:W
 
-*Note: `BOOKMARK`, `SAML_2_0`, and `WS_FEDERATION` signOnModes do not support an authentication scheme as they use a federated SSO protocol.  The `scheme` property should be omitted for apps with these signOnModes*
+> `BOOKMARK`, `SAML_2_0`, and `WS_FEDERATION` signOnModes do not support an authentication scheme as they use a federated SSO protocol.  The `scheme` property should be omitted for apps with these signOnModes
 
-### UserName Template Object
+#### UserName Template Object
 
 Specifies the template used to generate a user's username when the application is assigned via a group or directly to a user
 
@@ -306,7 +313,7 @@ template | mapping expression for username | String | | 1024 | TRUE | `${source.
 type | type of mapping expression | Enum: `NONE`,  `BUILT_IN`, or `CUSTOM` | | | FALSE | BUILT_IN
 userSuffix | suffix for built-in mapping expressions | String | | | TRUE | NULL
 
-*Note: You must use the `CUSTOM` type when defining your own expression that is not built-in*
+> You must use the `CUSTOM` type when defining your own expression that is not built-in
 
 ```json
 {
@@ -317,7 +324,8 @@ userSuffix | suffix for built-in mapping expressions | String | | | TRUE | NULL
 }    
 ```
 
-#### Built-In Expressions
+##### Built-In Expressions
+
 The following expressions are built-in and may be used with the `BUILT_IN` template type:
 
 Name | Template Expression
@@ -327,15 +335,14 @@ Okta username prefix | ${fn:substringBefore(source.login, ""@"")}
 Email | ${source.email}
 Email prefix | ${fn:substringBefore(source.email, ""@"")}
 Email (lowercase) | ${fn:toLowerCase(source.email)}
-AD SAM Account Name | 	${source.samAccountName}
+AD SAM Account Name | ${source.samAccountName}
 AD SAM Account Name (lowercase) | ${fn:toLowerCase(source.samAccountName)}
 AD User Principal Name | ${source.userName}
 AD User Principal Name prefix | ${fn:substringBefore(source.userName, ""@"")}
 AD Employee ID | ${source.employeeID}
 LDAP UID + custom suffix | ${source.userName}${instance.userSuffix}
 
-
-## Password Object
+### Password Object
 
 Specifies a password for a user.  A password value is a **write-only** property.  When a user has a valid password and a response object contains a password credential, then the Password Object will be a bare object without the ```value``` property defined (e.g. ```password: {}```) to indicate that a password value exists.
 
@@ -343,7 +350,7 @@ Attribute | DataType | MinLength | MaxLength | Nullable | Unique | Validation
 --- | --- | ---	| --- | --- | --- | ---
 value | String | | | TRUE | FALSE |
 
-## Application Links Object
+### Application Links Object
 
 Specifies link relations (See [Web Linking](http://tools.ietf.org/html/rfc5988)) available for the current status of an application using the [JSON Hypertext Application Language](http://tools.ietf.org/html/draft-kelly-json-hal-06) specification.  This object is used for dynamic discovery of related resources and lifecycle operations.  The Links Object is **read-only**.
 
@@ -356,10 +363,11 @@ metadata | Protocol-specific metadata document for the configured `SignOnMode`
 users |  [User](#application-user-operations) assignments for application
 users | [Group](#application-group-operations) assignments for application
 
-# Application User Model
+## Application User Model
+
 The application user model defines a user's application assignment and credentials.
 
-## Example
+### Example
 
 ```json
 {
@@ -378,7 +386,8 @@ The application user model defines a user's application assignment and credentia
 }
 ```
 
-## Application User Attributes
+### Application User Attributes
+
 All application users have the following attributes:
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
@@ -389,7 +398,8 @@ lastUpdated | timestamp when app user was last updated | Date | | | FALSE | FALS
 credentials | credentials for assigned app | [Application User Credentials Object](#application-user-credentials-object) | | | TRUE | FALSE | FALSE
 _links | discoverable resources related to the app user | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-05) | | | TRUE | FALSE | TRUE
 
-## Application User Credentials Object
+### Application User Credentials Object
+
 Specifies a user's credentials for the application.  The [Authentication Scheme](#authentication-schemes) of the app determines whether a userName or password can be assigned to a user.
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Default
@@ -424,9 +434,9 @@ If you attempt to assign a username or password to an application with an incomp
 }
 ```
 
-# Application Group Model
+## Application Group Model
     
-## Example
+### Example
 
 ```json
 {
@@ -441,7 +451,8 @@ If you attempt to assign a username or password to an application with an incomp
 }
 ```
 
-## Application Group Attributes
+### Application Group Attributes
+
 All application groups have the following attributes:
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
@@ -452,29 +463,29 @@ priority | priority of group assignment| Number | 0 | 100 | TRUE | FALSE | FALSE
 _links | discoverable resources related to the app group | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-05) | | | TRUE | FALSE | TRUE
 
 
-# Application Operations
+## Application Operations
 
-## Add Application
+### Add Application
 
 Adds a new application to your Okta organization.
 
-### POST /apps
+#### POST /apps
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 app | App-specific name, signOnMode and settings | Body | [Application](#application-model) | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 All responses return the created [Application](#application-model).
 
-### Add Bookmark Application
+#### Add Bookmark Application
 
 Adds an new bookmark application to your organization.
 
-#### Settings
+##### Settings
 
 Attribute | Description | DataType | Nullable | Unique | Validation
 --- | ---| --- |--- | --- | --- | ---
@@ -482,7 +493,7 @@ url | The URL of the launch page for this app | String | FALSE | FALSE | [URL](h
 requestIntegration | Would you like Okta to add an integration for this app? | Boolean | FALSE | FALSE |
 
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -503,7 +514,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -554,11 +565,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
     }
 ```
 
-### Add Basic Authentication Application
+#### Add Basic Authentication Application
 
 Add an new application that uses HTTP Basic Authentication Scheme and requires a browser plugin.
 
-#### Settings
+##### Settings
 
 Attribute | Description | DataType | Nullable | Unique | Validation
 --- | ---| --- |--- | --- | --- | ---
@@ -566,7 +577,7 @@ url | The URL of the login page for this app | String | FALSE | FALSE | [URL](ht
 authURL | The URL of the authenticating site for this app | String | FALSE | FALSE | [URL](http://tools.ietf.org/html/rfc3986)
 
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -587,7 +598,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -640,11 +651,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-### Add Plugin SWA Application
+#### Add Plugin SWA Application
 
 Adds a SWA application that requires a browser plugin.
 
-#### Settings
+##### Settings
 
 Attribute | Description | DataType | Nullable | Unique | Validation
 --- | ---| --- |--- | --- | --- | ---
@@ -654,7 +665,7 @@ passwordField | CSS selector for the password field in the login form | String |
 buttonField | CSS selector for the login button in the login form | String | FALSE | FALSE |
 
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -677,7 +688,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -732,11 +743,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-### Add Plugin SWA (3 Field) Application
+#### Add Plugin SWA (3 Field) Application
 
 Adds a SWA application that requires a browser plugin and supports 3 CSS selectors for the login form.
 
-#### Settings
+##### Settings
 
 Attribute | Description | DataType | Nullable | Unique | Validation
 --- | ---| --- |--- | --- | --- | ---
@@ -747,7 +758,7 @@ buttonField | CSS selector for the login button in the login form | String | FAL
 extraFieldSelector | CSS selector for the extra field in the form | String | FALSE | FALSE |
 extraFieldValue | Value for extra field form field | String | FALSE | FALSE |
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -772,7 +783,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -830,11 +841,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ```
 
 
-### Add SWA Application (No Plugin)
+#### Add SWA Application (No Plugin)
 
 Adds a SWA application that uses HTTP POST and does not require a browser plugin
 
-#### Settings
+##### Settings
 
 Attribute | Description | DataType | Nullable | Unique | Validation
 --- | ---| --- |--- | --- | --- | ---
@@ -849,7 +860,7 @@ optionalField3 | Name of the optional parameter in the login form | String | TRU
 optionalField3Value | Name of the optional value in the login form | String | TRUE | FALSE |
 
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -877,7 +888,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -937,11 +948,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-### Add SAML 2.0 Application
+#### Add SAML 2.0 Application
 
 Adds a SAML 2.0 WebSSO application
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -975,11 +986,11 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-### Add WS-Federation Application
+#### Add WS-Federation Application
 
 Adds a WS-Federation Passive Requestor Profile application with a SAML 2.0 token
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1010,13 +1021,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-## Get Application
+### Get Application
 
 Fetches an application from your Okta organization
 
-### GET /apps/:id
+#### GET /apps/:id
 
-#### Request Parameters
+##### Request Parameters
 
 Fetch a specific app by id.
 
@@ -1024,11 +1035,11 @@ Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | `id` of an app | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 Fetched [Application](#application-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1037,7 +1048,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oabizCHPNYALCHDUIOD"
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -1105,13 +1116,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## List Applications
+### List Applications
 
-### GET /apps
+#### GET /apps
 
 Fetch a list of apps from your Okta organization.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -1119,9 +1130,10 @@ limit | Specified the number of results for a page | Query | Number | FALSE | 20
 filter | Filters apps by `status`, `user.id`, or `group.id` expression | Query | String | FALSE |
 after | Specifies the pagination cursor for the next page of apps | Query | String | FALSE |
 
-*Note: The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
-##### Filters
+###### Filters
+
 The following filters are supported with the filter query parameter:
 
 Filter | Description
@@ -1131,15 +1143,15 @@ Filter | Description
 `user.id eq ":uid"` | Apps assigned to a specific user such as `00ucw2RPGIUNTDQOYPOF`
 `group.id eq ":gid"` | Apps assigned to a specific group such as `00gckgEHZXOUDGDJLYLG`
 
-*Note: Only a single expression is supported as this time*
+> Only a single expression is supported as this time
 
-#### Response Parameters
+##### Response Parameters
 
 Array of [Applications](#application-model)
 
-### List Applications with Defaults
+#### List Applications with Defaults
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1148,7 +1160,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps"
 ```
 
-#### Response
+##### Response
 
 ```json
 [
@@ -1268,9 +1280,9 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ]
 ```
 
-### List Applications Assigned to User
+#### List Applications Assigned to User
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1279,7 +1291,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps?filter=user.id+eq+\"00ucw2RPGIUNTDQOYPOF\""
 ```
 
-#### Response
+##### Response
 
 ```json
 [
@@ -1399,9 +1411,9 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ]
 ```
 
-### List Applications Assigned to Group
+#### List Applications Assigned to Group
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1410,7 +1422,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps?filter=group.id+eq+\"00gckgEHZXOUDGDJLYLG\""
 ```
 
-#### Response
+##### Response
 
 ```json
 [
@@ -1468,28 +1480,28 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ```
 
 
-## Update Application
+### Update Application
 
-### PUT /apps/:id
+#### PUT /apps/:id
 
 Update settings for an application.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of app to update | URL | String | TRUE |
 profile | Updated profile for user | Body | [Application](#application-model) | FALSE |
 
-*Note: All attributes must be specified when updating an app  __Partial updates are not supported!__*
+> All attributes must be specified when updating an app  __Partial updates are not supported!__
 
-#### Response Parameters
+##### Response Parameters
 
 Updated [Application](#application-model)
 
-### Set SWA User-Editable UserName & Password
+#### Set SWA User-Editable UserName & Password
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1535,7 +1547,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -1593,9 +1605,9 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-### Set SWA User-Editable Password
+#### Set SWA User-Editable Password
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1641,7 +1653,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -1696,9 +1708,9 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-### Set SWA Okta Password
+#### Set SWA Okta Password
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1744,7 +1756,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -1799,9 +1811,9 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-### Set SWA Shared Credentials
+#### Set SWA Shared Credentials
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1849,7 +1861,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -1906,22 +1918,22 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## Delete Application
+### Delete Application
 
-### DELETE /apps/:id
+#### DELETE /apps/:id
 
 Removes an inactive application.
 
-*Note: applications must be deactivated before they can be deleted*
+> Applications must be deactivated before they can be deleted
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of app to delete | URL | String | TRUE |
 
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1930,7 +1942,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X DELETE "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS"
 ```
 
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 204 No Content
@@ -1955,25 +1967,25 @@ Content-Type: application/json
 }
 ```
 
-# Application Lifecycle Operations
+## Application Lifecycle Operations
 
-## Activate Application
+### Activate Application
 
-### POST /apps/:id/lifecycle/activate
+#### POST /apps/:id/lifecycle/activate
 
 Activates an inactive application.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of app to activate | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 An empty JSON object `{}`
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -1982,29 +1994,29 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X POST "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS/lifecycle/activate"
 ```
 
-#### Response
+##### Response
 
 ```json
 {}
 ```
 
-## Deactivate Application
+### Deactivate Application
 
-### POST /apps/:id/lifecycle/deactivate
+#### POST /apps/:id/lifecycle/deactivate
 
 Deactivates an active application.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of app to deactivate | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 An empty JSON object `{}`
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2013,21 +2025,21 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X POST "https://your-domain.okta.com/api/v1/apps/0oabkvBLDEKCNXBGYUAS/lifecycle/deactivate"
 ```
 
-#### Response
+##### Response
 
 ```json
 {}
 ```
 
-# Application User Operations
+## Application User Operations
 
-## Assign User to Application
+### Assign User to Application
 
 Assigns a user to an application
 
-### PUT /apps/:aid/users/:uid
+#### PUT /apps/:aid/users/:uid
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -2035,13 +2047,13 @@ aid | unique key of [Application](#application-model) | URL | String | TRUE |
 uid | unique key of a valid [User](../users.md) | URL | String | TRUE |
 appuser | App user | Body | [Application User](#application-user-model) | FALSE |
 
-*Note: For applications with [SignOn Modes](#signon-modes) or [Authentication Schemes](#authentication-schemes) that do not require or support credentials, pass and empty json object `{}` as the `appuser` request body* 
+> For applications with [SignOn Modes](#signon-modes) or [Authentication Schemes](#authentication-schemes) that do not require or support credentials, pass and empty json object `{}` as the `appuser` request body
 
-#### Response Parameters
+##### Response Parameters
 
 All responses return the assigned [Application User](#application-user-model).
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2059,7 +2071,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -2078,13 +2090,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## Get Assigned User for Application
+### Get Assigned User for Application
 
 Fetches an application user assignment
 
-### GET /apps/:aid/users/:uid
+#### GET /apps/:aid/users/:uid
 
-#### Request Parameters
+##### Request Parameters
 
 Fetch a specific app user assignment by id.
 
@@ -2093,11 +2105,11 @@ Parameter | Description | Param Type | DataType | Required | Default
 aid | unique key of [Application](#application-model) | URL | String | TRUE |
 uid | unique key of assigned [User](../users.md) | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 Fetched [Application User](#application-user-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2106,7 +2118,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO"
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -2125,13 +2137,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## List Users Assigned to Application
+### List Users Assigned to Application
 
-### GET /apps/:aid/users
+#### GET /apps/:aid/users
 
 Fetch a list of app user assignments for an application.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -2139,13 +2151,13 @@ aid | unique key of [Application](#application-model) | URL | String | TRUE |
 limit | Specifies the number of results for a page | Query | Number | FALSE | 20
 after | Specifies the pagination cursor for the next page of assignments | Query | String | FALSE |
 
-*Note: The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
-#### Response Parameters
+##### Response Parameters
 
 Array of [Application Users](#application-user-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2154,7 +2166,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users"
 ```
 
-#### Response
+##### Response
 
 ```json
 [
@@ -2189,13 +2201,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ]
 ```
 
-## Update Credentials for Application 
+### Update Credentials for Application 
 
 Updates a user's credentials for an application
 
-### PUT /apps/:aid/users/:uid
+#### PUT /apps/:aid/users/:uid
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -2219,11 +2231,11 @@ If you attempt to assign a username or password to an application with an incomp
 }
 ```
 
-#### Response Parameters
+##### Response Parameters
 
 All responses return the assigned [Application User](#application-user-model).
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2241,7 +2253,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -2259,13 +2271,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
     }
 }
 ```
-## Remove User from Application
+### Remove User from Application
 
 Removes an user from an application.
 
-### DELETE /apps/:aid/users/:uid
+#### DELETE /apps/:aid/users/:uid
 
-#### Request Parameters
+##### Request Parameters
 
 Remove a specific app user assignment by id.
 
@@ -2274,11 +2286,11 @@ Parameter | Description | Param Type | DataType | Required | Default
 aid | unique key of [Application](#application-model) | URL | String | TRUE |
 uid | unique key of assigned [User](../users.md) | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 An empty JSON object `{}`
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2287,21 +2299,21 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X DELETE "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/users/00ud4tVDDXYVKPXKVLCO" 
 ```
 
-#### Response
+##### Response
 
 ```json
 {}
 ```
 
-# Application Group Operations
+## Application Group Operations
 
-## Assign Group to Application
+### Assign Group to Application
 
 Assigns a group to an application
 
-### PUT /apps/:aid/groups/:gid
+#### PUT /apps/:aid/groups/:gid
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -2309,11 +2321,11 @@ aid | unique key of [Application](#application-model) | URL | String | TRUE |
 gid | unique key of a valid [Group](../groups.md) | URL | String | TRUE |
 appgroup | App group | Body | [Application Group](#application-group-model) | FALSE |
 
-#### Response Parameters
+##### Response Parameters
 
 All responses return the assigned [Application Group](#application-group-model).
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2325,7 +2337,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -2335,13 +2347,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## Get Assigned Group for Application
+### Get Assigned Group for Application
 
 Fetches an application group assignment
 
-### GET /apps/:aid/groups/:gid
+#### GET /apps/:aid/groups/:gid
 
-#### Request Parameters
+##### Request Parameters
 
 Fetch a specific app group assignment by id.
 
@@ -2350,11 +2362,11 @@ Parameter | Description | Param Type | DataType | Required | Default
 aid | unique key of [Application](#application-model) | URL | String | TRUE |
 gid | unique key of an assigned [Group](../groups.md) | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 Fetched [Application Group](#application-group-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2363,7 +2375,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR"
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -2373,13 +2385,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## List Groups Assigned to Application
+### List Groups Assigned to Application
 
-### GET /apps/:aid/groups
+#### GET /apps/:aid/groups
 
 Fetch a list of app group assignments for an application.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -2387,13 +2399,13 @@ aid | unique key of [Application](#application-model) | URL | String | TRUE |
 limit | Specifies the number of results for a page | Query | Number | FALSE | 20
 after | Specifies the pagination cursor for the next page of assignments | Query | String | FALSE |
 
-*Note: The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
-#### Response Parameters
+##### Response Parameters
 
 Array of [Application Groups](#application-group-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2402,7 +2414,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups"
 ```
 
-#### Response
+##### Response
 
 ```json
 [
@@ -2419,13 +2431,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ]
 ```
 
-## Remove Group from Application
+### Remove Group from Application
 
 Removes a group from an application.
 
-### DELETE /apps/:aid/groups/:gid
+#### DELETE /apps/:aid/groups/:gid
 
-#### Request Parameters
+##### Request Parameters
 
 Remove a specific app group assignment by id.
 
@@ -2434,11 +2446,11 @@ Parameter | Description | Param Type | DataType | Required | Default
 aid | unique key of [Application](#application-model) | URL | String | TRUE |
 gid | unique key of an assigned [Group](../groups.md) | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 An empty JSON object `{}`
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -2447,7 +2459,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X DELETE "https://your-domain.okta.com/api/v1/apps/0oad5lTSBOMUBOBVVQSC/groups/00gbkkGFFWZDLCNTAGQR"
 ```
 
-#### Response
+##### Response
 
 ```json
 {}

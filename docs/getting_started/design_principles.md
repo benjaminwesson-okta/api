@@ -34,7 +34,7 @@ All URLs listed in the documentation should be preceded with your organization's
 
 The `apiversion` is is currently v1.
 
-*Note: All API access is over HTTPS*
+> All API requests must use HTTPS scheme
 
 ## Media Types
 
@@ -64,7 +64,7 @@ with no `body` param, be sure to set the `Content-Length` header to zero.
 DELETE
 : Used for deleting resources.
 
-*Note: Any PUT or POST request with no Content-Length header nor a body will return a 411 error.  To get around this, either include a Content-Length: 0 header*
+> Any PUT or POST request with no Content-Length header nor a body will return a 411 error.  To get around this, either include a Content-Length: 0 header
 
 ## Errors
 
@@ -93,7 +93,7 @@ All requests that result in an error will return the appropriate 4xx or 5xx erro
 
 See [Error Codes](error_codes.md) for a list of API error codes.
 
-*Note: Only the `errorCode` property is supported for runtime error flow control.  The `errorSummary` property is only to intended for troubleshooting and may change over time*
+> Only the `errorCode` property is supported for runtime error flow control.  The `errorSummary` property is only to intended for troubleshooting and may change over time
 
 ## Authentication
 
@@ -103,7 +103,6 @@ The API currently only supports API keys with a custom HTTP authentication schem
 
 See [Obtaining a token](getting_a_token.md) for instructions on how to get an API key for your organization.
 
-
 ## Pagination
 
 Requests that return a list of resources may support paging.  Pagination is based on
@@ -111,7 +110,6 @@ cursor and not on page number. The cursor is opaque to the client and specified 
 
 Note that for technical reasons not all endpoints respect pagination or the `?limit` parameter,
 see the [Events](../endpoints/events.md) API for example.
-
 
 `before`
 : This is the cursor that points to the start of the page of data that has been returned.
@@ -150,7 +148,7 @@ Resources in the Okta API use hypermedia for "discoverability".  Hypermedia enab
 
 The Okta API had incorporated [JSON Hypertext Application Language](http://tools.ietf.org/html/draft-kelly-json-hal-06) or HAL format as the foundation for hypermedia "discoverability.  HAL provides a set of conventions for expressing hyperlinks in JSON responses representing two simple concepts: Resources and Links. 
 
-*Note: The HAL-specific media type `application/hal+json` is currently not supported as a formal media type for content negotiation at this time.  Use the standard `application/json` media type.  As we get more experience with the media format we may add support for the media type.*  
+> The HAL-specific media type `application/hal+json` is currently not supported as a formal media type for content negotiation at this time.  Use the standard `application/json` media type.  As we get more experience with the media format we may add support for the media type.
 
 ### Resources
 
@@ -170,7 +168,7 @@ Object whose property names are link relation types (as defined by [RFC5988](htt
 - The name of the link relation (`rel`)
 - A few other optional properties to help with deprecation, content negotiation, etc.
 
-*Note: A resource may have multiple links that share the same link relation.*
+> A resource may have multiple links that share the same link relation.
 
 ```json
 {
@@ -200,6 +198,6 @@ X-RateLimit-Remaining: 70
 X-RateLimit-Reset: 1366037820
 ```
 
-If the rate limit is exceeded, an HTTP 429 Status Code is returned.
+If the rate limit is exceeded, an HTTP 429 Status Code is returned.  The current Rate Limit is 75 request per-org per-second
 
 **Rate Limits are currently not enforced. The headers are returned for information only.  Enforcement will be rolled out on a per-org basis for existing API users**

@@ -1,4 +1,6 @@
-# Overview
+# Groups
+
+## Overview
 
 The Groups API provides operations to manage your organization groups an their user members.
 
@@ -21,9 +23,9 @@ The Groups API provides operations to manage your organization groups an their u
 - [Related Resources](#related-resources)
 	- [List Assigned Applications](#list-assigned-applications)
 
-# Group Model
+## Group Model
 
-## Example
+### Example
 
 ```json
 {
@@ -58,24 +60,24 @@ The Groups API provides operations to manage your organization groups an their u
 }
 ```
 
-## Group Attributes
+### Group Attributes
 
 All groups have the following attributes:
 
 Attribute | Description | DataType | MinLength | MaxLength | Nullable | Unique | Readonly
---- | --- | ---	| --- | --- | --- | --- | ---
+--------- | ----------- | -------- | --------- | --------- | -------- | ------ | --------
 id | unique key for group | String | | | FALSE | TRUE | TRUE
 objectClass | determines the group's `profile` | Array of String | 1 | | TRUE | FALSE | TRUE
 profile | the group's profile attributes | [Profile Object](#profile-object) | | | FALSE | FALSE | FALSE
 _links | [discoverable resources](#links-object) related to the group | [JSON HAL](http://tools.ietf.org/html/draft-kelly-json-hal-06) | | | TRUE | FALSE | TRUE
 
-*Note: id, objectClass, and _links are only available after a group is created*
+> `id`, `objectClass`, and `_links` are only available after a group is created
 
-## Profile Object
+### Profile Object
 
 Specifies required and optional attributes for a group.  The `objectClass` of group determines what additional attributes are available.
 
-### ObjectClass: okta:user_group
+#### ObjectClass: okta:user_group
 
 Profile for any group that is **not** imported from Active Directory
 
@@ -91,7 +93,7 @@ description | description of the group | String | 0 | 1024 | TRUE | FALSE
 }
 ```
 
-### ObjectClass: okta:windows_security_principal 
+#### ObjectClass: okta:windows_security_principal 
 
 Profile for a group that is imported from Active Directory
 
@@ -117,7 +119,7 @@ externalId | base-64 encoded GUID (objectGUID) of the windows group | String | F
 }
 ```
 
-## Links Object
+### Links Object
 
 Specifies link relations (See [Web Linking](http://tools.ietf.org/html/rfc5988)) available for the group using the [JSON Hypertext Application Language](http://tools.ietf.org/html/draft-kelly-json-hal-06) specification.  This object is used for dynamic discovery of related resources and lifecycle operations.  The Links Object is **read-only**.
 
@@ -128,27 +130,27 @@ logo | Provides links to logo images for the group if available
 users | Provides [group member operations](#group-member-operations) for the group
 apps | Lists all [applications](apps.md#application-model) that are assigned to the group. See [Application Group Operations](apps.md#application-group-operations)
 
-# Group Operations
+## Group Operations
 
-## Add Group
+### Add Group
 
 Adds a new Okta group to your organization.
 
-*Note: Only Okta groups can be added.  Application import operations are responsible for syncing non-Okta groups such as Active Directory groups.*
+> Only Okta groups can be added.  Application import operations are responsible for syncing non-Okta groups such as Active Directory groups.
 
-### POST /groups
+#### POST /groups
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 profile | `okta:user_group` profile for a new group | Body | [Profile-Object](#profile-object) | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 The created [Group](#group-model).
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
@@ -164,7 +166,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }' 
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -199,23 +201,23 @@ curl -v -H "Authorization:SSWS yourtoken" \
 }
 ```
 
-## Get Group
+### Get Group
 
-### GET /groups/:id
+#### GET /groups/:id
 
 Fetches a specific group from your organization
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | `id` of a group | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 Fetched [Group](#group-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -223,7 +225,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/groups/00gevhYMOEIQMDAPUQGQ"
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -258,13 +260,13 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## List Groups
+### List Groups
 
-### GET /groups
+#### GET /groups
 
 Fetch a list of groups from your organization.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -272,21 +274,21 @@ q | Searches the `name` attribute of groups for matching value | Query | String 
 limit | Specifies the number of group results in a page | Query | Number | FALSE | 10000
 after | Specifies the pagination cursor for the next page of groups | Query | String | FALSE |
 
-*Note: The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
-#### Response Parameters
+##### Response Parameters
 
 Array of [Groups](#group-model)
 
-### List All Groups
+#### List All Groups
 
 Fetches all groups in your organization.
 
 The default group limit is set to a very high number due to historical reasons which is no longer valid for most organizations.  This will change in a future version of this API.  The recommended page limit is now `limit=200`.
 
-*Note:  If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))*
+> If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -294,7 +296,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/groups?limit=200"
 ```
 
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 200 OK
@@ -366,15 +368,15 @@ Link: <https://your-domain.okta.com/api/v1/groups?after=00ud4tVDDXYVKPXKVLCO&lim
 ]
 ```
 
-### Search Groups 
+#### Search Groups 
 
 Searches for groups by `name` in your organization.
 
-*Note: Paging and searching are currently mutually exclusive.  You cannot page a query.  The default limit for a query is `300` results. Query is intended for an auto-complete picker use case where users will refine their search string to constrain the results.*
+> Paging and searching are currently mutually exclusive.  You cannot page a query.  The default limit for a query is `300` results. Query is intended for an auto-complete picker use case where users will refine their search string to constrain the results.
 
-*Note: Search currently performs a startsWith match but it should be considered an implementation detail and may change without notice in the future. Exact matches will always be returned before partial matches*
+> Search currently performs a startsWith match but it should be considered an implementation detail and may change without notice in the future. Exact matches will always be returned before partial matches
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -382,7 +384,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/groups?q=West&limit=1"
 ```
 
-#### Response
+##### Response
 
 ```json
 [
@@ -419,28 +421,28 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ]
 ```
 
-## Update Group
+### Update Group
 
-### PUT /groups/:id
+#### PUT /groups/:id
 
 Updates an Okta group's profile.
 
-*Note: Only profiles for Okta groups can be modified.*
+> Only profiles for Okta groups can be modified.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of the group to update | URL | String | TRUE |
 profile | Updated profile for the group | Body | [Profile Object](#profile-object) | TRUE |
 
-*Note: All profile attributes must be specified when updating a user's profile.  __Partial updates are not supported!__*
+> All profile attributes must be specified when updating a user's profile.  __Partial updates are not supported!__
 
-#### Response Parameters
+##### Response Parameters
 
 Updated [Group](#group-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -456,7 +458,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }'
 ```
 
-#### Response
+##### Response
 
 ```json
 {
@@ -491,25 +493,25 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
-## Remove Group
+### Remove Group
 
-### DELETE /groups/:id
+#### DELETE /groups/:id
 
 Removes an Okta group from your organization.
 
-*Note: Only Okta groups can be removed.  Application import operations are responsible for syncing non-Okta groups such as Active Directory groups.*
+> Only Okta groups can be removed.  Application import operations are responsible for syncing non-Okta groups such as Active Directory groups.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 id | id of the group to delete | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 N/A
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -517,23 +519,23 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X DELETE "https://your-domain.okta.com/api/v1/groups/00ub0oNGTSWTBKOLGLNR"
 ```
 
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 204 No Content
 ```
 
-# Group Member Operations
+## Group Member Operations
 
 Operations that manage group memberships.
 
-## List Group Members
+### List Group Members
 
-### GET /groups/:id/users
+#### GET /groups/:id/users
 
 Fetches all [users](#users.md) that are a member of an Okta group or an application imported group.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -541,17 +543,17 @@ id | id of the group | URL | String | TRUE |
 limit | Specifies the number of user results in a page | Query | Number | FALSE | 10000
 after | Specifies the pagination cursor for the next page of users | Query | String | FALSE |
 
-*Note: The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
 The default user limit is set to a very high number due to historical reasons which is no longer valid for most organizations.  This will change in a future version of this API.  The recommended page limit is now `limit=200`.
 
-*Note:  If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))*
+> If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))
 
-#### Response Parameters
+##### Response Parameters
 
 Array of [Users](users.md#user-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization: SSWS yourtoken" \
@@ -559,7 +561,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 -X GET "https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?limit=2"
 ```
 
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 200 OK
@@ -635,79 +637,79 @@ Link: <https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users?aft
 ]
 ```
 
-## Add User to Group
+### Add User to Group
 
-### PUT /groups/:gid/users/:uid
+#### PUT /groups/:gid/users/:uid
 
 Adds an [Okta user](users.md#user-model) from an Okta group.
 
-*Note: You can only manage Okta-mastered group memberships.  Application import operations are responsible for syncing non-Okta group memberships such as Active Directory groups.*
+> You can only manage Okta-mastered group memberships.  Application import operations are responsible for syncing non-Okta group memberships such as Active Directory groups.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 gid | id of the group | URL | String | TRUE |
 uid | id of the user | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 N/A
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -X PUT https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users/00u1f96ECLNVOKVMUSEA
 ```
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 204 No Content
 ```
 
-## Remove User from Group
+### Remove User from Group
 
-### DELETE /groups/:gid/users/:uid
+#### DELETE /groups/:gid/users/:uid
 
 Removes an [Okta user](users.md#user-model) from an Okta group.
 
-*Note: You can only manage Okta-mastered group memberships.  Application import operations are responsible for syncing non-Okta group memberships such as Active Directory groups.*
+> You can only manage Okta-mastered group memberships.  Application import operations are responsible for syncing non-Okta group memberships such as Active Directory groups.
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 gid | id of the group | URL | String | TRUE |
 uid | id of the user | URL | String | TRUE |
 
-#### Response Parameters
+##### Response Parameters
 
 N/A
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
 -H "Accept:application/json" \
 -X DELETE https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/users/00u1f96ECLNVOKVMUSEA
 ```
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 204 No Content
 ```
 
-# Related Resources    
+## Related Resources    
 
-## List Assigned Applications
+### List Assigned Applications
 
 Lists all [applications](apps.md#application-model) that are assigned to the group. See [Application Group Operations](apps.md#application-group-operations)
 
-### GET /groups/:id/apps
+#### GET /groups/:id/apps
 
-#### Request Parameters
+##### Request Parameters
 
 Parameter | Description | ParamType | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -715,13 +717,13 @@ id | id of the group | URL | String | TRUE |
 limit | Specifies the number of app results for a page | Query | Number | FALSE | 20
 after | Specifies the pagination cursor for the next page of apps | Query | String | FALSE |
 
-*Note: The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The page cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
-#### Response Parameters
+##### Response Parameters
 
 Array of [Applications](apps.md#application-model)
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
@@ -729,7 +731,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 -X GET https://your-domain.okta.com/api/v1/groups/00g1fanEFIQHMQQJMHZP/apps
 ```
 
-#### Response
+##### Response
 
 ```http
 HTTP/1.1 200 OK

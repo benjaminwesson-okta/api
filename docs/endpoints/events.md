@@ -1,4 +1,6 @@
-# Overview
+# Events
+
+## Overview
 
 The Event API provides read access to your organization's system log. The API is intended to export event data as a batch job from your organization to another system for reporting or analysis.
 
@@ -13,11 +15,11 @@ The Event API provides read access to your organization's system log. The API is
 - [List Events](#list-events)
 	
 
-# Event Model
+## Event Model
 
 Every organization has a system log that maintains a history of actions performed by users.  The Event model describes a single action that was performed by a set of actors for a set of targets.
 
-## Example
+### Example
 
 ```json
  {
@@ -61,7 +63,8 @@ Every organization has a system log that maintains a history of actions performe
 }
 ```
 
-## Attributes
+### Attributes
+
 The Event model is a ***read-only*** object and has a fixed set of attributes:
 
 Attribute | Description | DataType | Nullable
@@ -72,9 +75,9 @@ action | Identifies the action that the event describes | [Action Object](#actio
 actors | Describes zero or more entities that performed the action | Array of [Actor Object](#actor-object) | TRUE
 targets | Describes zero or more entities that the action was performed against | Array of [Target Object](#target-object) | TRUE
 
-*Note: The actor and/or target of an event is dependant on the action performed. Not all events have an actor or target.*
+> The actor and/or target of an event is dependant on the action performed. Not all events have an actor or target.
 
-## Action Object
+### Action Object
 
 Describes an activity that published an event
 
@@ -85,7 +88,7 @@ categories | [Categories](#action-categories) for an action | Array of String | 
 objectType | Identifies the [unique type](#action-objecttypes) of an action | String | FALSE
 requestUri | Uri of the request that generated the event. | String | TRUE
 
-*Note: Actions that do not define any categories will have an zero element array value.*
+> Actions that do not define any categories will have an zero element array value.
 
 ``` json
 {
@@ -98,7 +101,8 @@ requestUri | Uri of the request that generated the event. | String | TRUE
 }
 ```
 
-### Action Categories
+#### Action Categories
+
 Categories for an action:
 
 * Application Assignment
@@ -115,21 +119,20 @@ Categories for an action:
 * Application Imports (Detailed)
 * SMS Messages
 
-*Note: Additional categories may be added in the future without versioning*
+> Additional categories may be added in the future without versioning
 
-### Action ObjectTypes
+#### Action ObjectTypes
 
 Action `objectType` identifies the unique action performed.
 
-
-#### Application Authentication
+##### Application Authentication
 
 ObjectType | Description 
 --- | ---
 app.auth.sso | Event occurred during single sign on
 app.auth.delegated.outbound | Event occurred during outbound delegated authentication
 
-#### Application User Management 
+##### Application User Management 
 
 ObjectType | Description 
 --- | ---
@@ -151,7 +154,7 @@ app.user_management.provision_user.user_inactive | Attempt to provision a user t
 app.user_management.deactivate_user.api_account | Deactivate API user in application
 app.user_management.deprovision_task_complete | Deprovisioning task has been marked complete (automatically or manually)
 
-#### Application Group Management
+##### Application Group Management
 
 ObjectType | Description 
 --- | ---
@@ -174,7 +177,7 @@ app.user_management.grouppush.mapping.app.group.renamed | Successfully renamed t
 app.user_management.grouppush.mapping.app.group.renamed.failed | Failed to rename target application group when source group was renamed
 app.user_management.grouppush.mapping.and.groups.deleted.rule.deleted | An existing mapping and its target groups have been deleted because a mapping rule was deleted
 
-#### Delegated Authentication
+##### Delegated Authentication
 
 ObjectType | Description 
 --- | ---
@@ -185,7 +188,7 @@ app.inbound_del_auth.failure.account_not_found | Inbound delauth account not fou
 app.inbound_del_auth.failure.invalid_login_credentials | Inbound delauth, invalid login credentials
 app.inbound_del_auth.login_success | Successful delauth login
    
-#### Rich Client Authentication   
+##### Rich Client Authentication   
 
 ObjectType | Description 
 --- | ---
@@ -195,7 +198,7 @@ app.rich_client.multiple_accounts_found |
 app.rich_client.login_failure |
 app.rich_client.login_success |
 
-#### Admin Appplication  
+##### Admin Appplication  
 
 ObjectType | Description 
 --- | ---
@@ -203,7 +206,7 @@ app.admin.sso.no_response |
 app.admin.sso.bad_response |
 app.admin.sso.orgapp.notfound |
 
-#### Applications
+##### Applications
 
 ObjectType | Description 
 --- | ---
@@ -236,7 +239,7 @@ app.generic.import.summary.user |
 app.generic.import.summary.group |
 app.generic.import.summary.group_membership |
 
-#### Credential Recovery
+##### Credential Recovery
 
 ObjectType | Description 
 --- | ---
@@ -244,7 +247,7 @@ app.generic.reversibility.credentials.recover |
 app.generic.reversibility.personal.app.recovery |
 app.generic.reversibility.individual.app.recovery |
 
-#### Application Instance
+##### Application Instance
 
 ObjectType | Description 
 --- | ---
@@ -255,7 +258,7 @@ app.app_instance.outbound_delauth_enabled |
 app.app_instance.outbound_delauth_disabled |
 app.app_instance.config-error |
 
-#### User Authentication
+##### User Authentication
 
 ObjectType | Description 
 --- | ---
@@ -266,7 +269,7 @@ core.user_auth.account_locked |
 core.user_auth.session_expired |
 core.user_auth.mfa_bypass_attempted |
 
-#### User MFA Authentication
+##### User MFA Authentication
 
 ObjectType | Description 
 --- | ---
@@ -274,15 +277,14 @@ core.user.sms.message_sent.factor |
 core.user.sms.message_sent.verify |
 core.user.sms.message_sent.forgotpw |
 
-
-#### User RADIUS Authentication
+##### User RADIUS Authentication
 
 ObjectType | Description 
 --- | ---
 core.user_auth.radius.login.succeeded |
 core.user_auth.radius.login.failed |
 
-#### User Status
+##### User Status
 
 ObjectType | Description 
 --- | ---
@@ -294,7 +296,7 @@ core.user.config.user_status.password_reset |
 core.user.config.user_creation.success |
 core.user.config.user_creation.failure |
 
-#### User Impersonation
+##### User Impersonation
 
 ObjectType | Description 
 --- | ---
@@ -304,15 +306,14 @@ core.user.impersonation.grant.enabled |
 core.user.impersonation.grant.extended |
 core.user.impersonation.grant.revoked |
 
-#### User Administrator Roles
+##### User Administrator Roles
 
 ObjectType | Description 
 --- | ---
 core.user.admin_privilege.granted |
 core.user.admin_privilege.revoked |
 
-
-## Actor Object
+### Actor Object
 
 Actor of an event
 
@@ -322,9 +323,9 @@ id | Unique key for actor| String | FALSE
 displayName | Name of actor used for display purposes | String | FALSE
 objectType | [User](#user-objecttype) or [Client](#client-objecttype)  | String | FALSE
 
-*Note: The schema of an actor is dependent on the actor's `objectType`*
+> The schema of an actor is dependent on the actor's `objectType`
 
-## Target Object
+### Target Object
 
 Target of an event
 
@@ -334,11 +335,11 @@ id | Unique key for target| String | FALSE
 displayName | Name of target used for display purposes | String | FALSE
 objectType | [User](#user-objecttype) or [AppInstance](#appinstance-objecttype) | String | FALSE
 
-*Note: The schema of a target is dependent on the actor's `objectType`*
+> The schema of a target is dependent on the actor's `objectType`
 
-## Actor/Target ObjectTypes
+### Actor/Target ObjectTypes
 
-### User ObjectType
+#### User ObjectType
 
 A denormalized reference to a [User](users.md#user-model).
 
@@ -358,9 +359,9 @@ login | Unique login for [user](users.md#user-model) | String | FALSE
 }
 ```
 
-*Note: The user can be retrieved by `id` with the [User API](users.md#get-user-with-id).*
+> The user can be retrieved by `id` with the [User API](users.md#get-user-with-id).
 
-### AppInstance ObjectType
+#### AppInstance ObjectType
 
 A denormalized reference to an application
 
@@ -378,9 +379,9 @@ displayName | Label of application | String | FALSE
 }
 ```
 
-*Note: The app can be retrieved by `id` with the [Apps API](apps.md#get-application).*
+> The app can be retrieved by `id` with the [Apps API](apps.md#get-application).
 
-### Client ObjectType
+#### Client ObjectType
 
 A denormalized reference to a client such as a browser
 
@@ -401,13 +402,13 @@ ipAddress | IP Address of client | String | TRUE
 }
 ```         
 
-# List Events
+## List Events
 
-## GET /events
+### GET /events
 
 Fetch a list of events from your Okta organization system log
 
-### Request Parameters
+#### Request Parameters
 
 Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
@@ -415,15 +416,15 @@ limit | Specifies the number of results to page | Query | Number | FALSE | 1000
 startDate | Specifies the timestamp to list events after | Query | Date | FALSE |
 after | Specifies the pagination cursor for the next page of events | Query | String | FALSE |
 
-*Note: The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)*
+> The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
-### Response Parameters
+#### Response Parameters
 
 Array of [Events](#event-model)
 
-### Example
+#### Example
 
-#### Request
+##### Request
 
 ```sh
 curl -v -H "Authorization:SSWS yourtoken" \
@@ -431,7 +432,7 @@ curl -v -H "Authorization:SSWS yourtoken" \
 -H "Content-type:application/json" \
 -X GET https://your-domain.okta.com/api/v1/events?startDate=2013-07-15T16%3A00%3A00.000Z\&limit=3
 ```
-#### Response
+##### Response
 
 ```
 HTTP/1.1 200 OK
