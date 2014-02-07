@@ -7,6 +7,7 @@
 - [Authentication](#authentication)
 - [Pagination](#pagination)
 	- [Link Header](#link-header)
+- [Filtering](#filtering)
 - [Rate Limiting](#rate-limiting)
 
 ## Versioning
