@@ -75,7 +75,7 @@ action | Identifies the action that the event describes | [Action Object](#actio
 actors | Describes zero or more entities that performed the action | Array of [Actor Object](#actor-object) | TRUE
 targets | Describes zero or more entities that the action was performed against | Array of [Target Object](#target-object) | TRUE
 
-> The actor and/or target of an event is dependant on the action performed. Not all events have an actor or target.
+> The actor and/or target of an event is dependent on the action performed. Not all events have an actor or target.
 
 ### Action Object
 
@@ -400,7 +400,7 @@ ipAddress | IP Address of client | String | TRUE
     "ipAddress": "127.0.0.1",
     "objectType": "Client"
 }
-```         
+```        
 
 ## List Events
 
@@ -414,9 +414,52 @@ Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 limit | Specifies the number of results to page | Query | Number | FALSE | 1000
 startDate | Specifies the timestamp to list events after | Query | Date | FALSE |
+filter | [Filter expression](../getting_started/design_principles.md#filtering) for events | Query | String | FALSE |
 after | Specifies the pagination cursor for the next page of events | Query | String | FALSE |
 
 > The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
+
+> `startDate` and `filter` query parameters are mutually exclusive and cannot be used together in the same request
+
+##### Filters
+
+The following expressions are supported for events with the `filter` query parameter:
+
+Filter | Description
+------ | ----------- 
+`action.objectType eq ":actionType"` | Events that have a specific [action objectType](#action-objectypes)
+`target.objectType eq ":objectType"` | Events published with a specific [target objectType](#actortarget-objecttypes)
+`target.id eq ":id"` | Events published with a specific target id
+`published lt "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"` | Events published before a specific datetime
+`published eq "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"` | Events published updated at a specific datetime
+`published gt "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"` | Events published updated after a specific datetime
+
+See [Filtering](../getting_started/design_principles.md#filtering) for more information on expressions
+
+> All filters must be [URL encoded](http://en.wikipedia.org/wiki/Percent-encoding) where `filter=published gt "2013-06-01T00:00:00.000Z"` is encoded as `filter=published%20gt%20%222013-06-01T00:00:00.000Z%22`
+
+**Filter Examples**
+
+Events published after 06/01/2013
+
+    filter=published gt "2013-06-01T00:00:00.000Z"
+    
+Events published for a target user 
+
+    filter=target.id eq "00uxc78lMKUMVIHLTAXY"
+    
+Failed login events published after 06/01/2013
+
+    filter=published gt "2013-06-01T00:00:00.000Z" and action.objectType eq "core.user_auth.login_failed" 
+    
+Events published after 06/01/2013 for a target user and application
+
+    filter=published gt "2013-06-01T00:00:00.000Z" and target.id eq "00uxc78lMKUMVIHLTAXY" and target.id eq "0oabe82gnXOFVCDUMVAK"
+
+App SSO events for a target user and application
+
+    filter=action.objectType eq "app.auth.sso" and target.id eq "00uxc78lMKUMVIHLTAXY" and target.id eq "0oabe82gnXOFVCDUMVAK"
+
 
 #### Response Parameters
 
