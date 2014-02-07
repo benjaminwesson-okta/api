@@ -21,7 +21,8 @@ The User API provides operations for user management.
 		- [Get User with login shortname](#get-user-with-login-shortname)
 	- [List Users](#list-users)
 		- [List Users with Search](#list-users-with-search)
-		- [List Users with Status (Filter)](#list-users-with-status-filter)
+		- [List Users Updated after Timestamp](#list-users-updated-after-timestamp)
+		- [List Users with Status](#list-users-with-status)
 	- [Update User](#update-user)
 		- [Update Profile](#update-profile)
 		- [Set Password](#set-password)
@@ -58,6 +59,7 @@ Content Type: application/json
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-06-27T16:35:28.000Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -103,6 +105,7 @@ created | timestamp when user was created | Date | FALSE
 activated | timestamp when transition to **ACTIVE** status *completed* | Date | TRUE
 statusChanged | timestamp when status last changed | Date | TRUE
 lastLogin | timestamp of last login | Date | TRUE
+lastUpdated | timestamp when user was last updated | Date | FALSE
 transitioningToStatus | target status of an inprogress asynchronous status transition | Enum: PROVISIONED, ACTIVE, DEPROVISIONED | TRUE
 
 > These attributes are only available after a user is created
@@ -213,7 +216,7 @@ changePassword | [Changes a user's password](#change-password) validating the us
 changeRecoveryQuestion | [Changes a user's recovery credential](#change-recovery-question) by validating the user's current password
 unlock | [Lifecycle operation](#unlock-user) to returns a user to **ACTIVE** status when their current status is **LOCKED_OUT** due to exceeding failed login attempts
 
-#User Operations
+# User Operations
 
 ### Create User
 
@@ -284,6 +287,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": null,
     "statusChanged": null,
     "lastLogin": null,
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
 	    "firstName": "Isaac",
         "lastName": "Brock",
@@ -337,6 +341,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": null,
     "statusChanged": null,
     "lastLogin": null,
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
 	    "firstName": "Isaac",
         "lastName": "Brock",
@@ -391,6 +396,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": null,
     "statusChanged": null,
     "lastLogin": null,
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
 	    "firstName": "Isaac",
         "lastName": "Brock",
@@ -447,6 +453,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": null,
     "statusChanged": null,
     "lastLogin": null,
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
 	    "firstName": "Isaac",
         "lastName": "Brock",
@@ -508,6 +515,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -562,6 +570,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -616,6 +625,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -661,12 +671,50 @@ Parameter | Description | Param Type | DataType | Required | Default
 --- | --- | --- | --- | --- | ---
 q | Searches `firstName`, `lastName`, and `email` attributes of users for matching value | Query | String | FALSE |
 limit | Specified the number of results | Query | Number | FALSE | 10000
-filter | Filters users by `status` expression (See Filter Expressions) | Query | String | FALSE | status eq "STAGED" or status eq "PROVISIONED" or status eq "ACTIVE" or status eq "RECOVERY" or status eq "LOCKED_OUT"
+filter | [Filter expression](../getting_started/design_principles.md#filtering) for users | Query | String | FALSE |
 after | Specifies the pagination cursor for the next page of users | Query | String | FALSE |
 
 > The `after` cursor should treated as an opaque value and obtained through the next link relation. See [Pagination](../getting_started/design_principles.md#pagination)
 
 > Search currently performs a startsWith match but it should be considered an implementation detail and may change without notice in the future
+
+###### Filters
+
+The following expressions are supported for users with the `filter` query parameter:
+
+Filter | Description
+------ | ----------- 
+`status eq "STAGED"` | Users that have a `status` of `STAGED`
+`status eq "PROVISIONED"` | Users that have a `status` of `PROVISIONED`
+`status eq "ACTIVE"` | Users that have a `status` of `ACTIVE`
+`status eq "RECOVERY"` | Users that have a `status` of `RECOVERY`
+`status eq "LOCKED_OUT"` | Users that have a `status` of `LOCKED_OUT`
+`status eq "DEPROVISIONED"` | Users that have a `status` of `DEPROVISIONED`
+`lastUpdated lt "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"` | Users last updated before a specific datetime
+`lastUpdated eq "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"` | Users last updated at a specific datetime
+`lastUpdated gt "yyyy-MM-dd'T'HH:mm:ss.SSSZZ"` | Users last updated after a specific datetime
+
+See [Filtering](../getting_started/design_principles.md#filtering) for more information on expressions
+
+> All filters must be [URL encoded](http://en.wikipedia.org/wiki/Percent-encoding) where `filter=lastUpdated gt "2013-06-01T00:00:00.000Z"` is encoded as `filter=lastUpdated%20gt%20%222013-06-01T00:00:00.000Z%22`
+
+**Filter Examples**
+
+Users with status of `LOCKED_OUT`
+
+    filter=status eq "LOCKED_OUT"
+
+Users updated after 06/01/2013 but before 01/01/2014
+
+    filter=lastUpdated gt "2013-06-01T00:00:00.000Z" and lastUpdated lt "2014-01-01T00:00:00.000Z"
+
+Users updated after 06/01/2013 but before 01/01/2014 with a status of `ACTIVE`
+
+    filter=lastUpdated gt "2013-06-27T16:35:28.000Z" and lastUpdated lt "2013-07-04T16:35:28.000Z" and status eq "ACTIVE"
+    
+Users updated after 06/01/2013 but with a status of `LOCKED_OUT` or `RECOVERY`
+
+    filter=lastUpdated gt "2013-06-27T16:35:28.000Z" and (status eq "LOCKED_OUT" or status eq "RECOVERY")
 
 ##### Response Parameters
 
@@ -676,7 +724,7 @@ Array of [User](#user-model)
 
 The default user limit is set to a very high number due to historical reasons which is no longer valid for most organizations.  This will change in a future version of this API.  The recommended page limit is now `limit=200`.
 
-*Note:  If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))*
+> If you receive a HTTP 500 status code, you more than likely have exceeded the request timeout.  Retry your request with a smaller `limit` and page the results (See [Pagination](../getting_started/design_principles.md#pagination))
 
 ##### Request
 
@@ -703,6 +751,7 @@ Link: <https://your-domain.okta.com/api/v1/users?after=00ud4tVDDXYVKPXKVLCO&limi
         "activated": null,
         "statusChanged": null,
         "lastLogin": null,
+        "lastUpdated": "2013-07-02T21:36:25.344Z",
         "profile": {
     	    "firstName": "Isaac",
             "lastName": "Brock",
@@ -724,6 +773,7 @@ Link: <https://your-domain.okta.com/api/v1/users?after=00ud4tVDDXYVKPXKVLCO&limi
         "activated": "2013-06-24T16:39:19.000Z",
         "statusChanged": "2013-06-24T16:39:19.000Z",
         "lastLogin": "2013-06-24T17:39:19.000Z",
+        "lastUpdated": "2013-07-02T21:36:25.344Z",
         "profile": {
             "firstName": "Eric",
             "lastName": "Judy",
@@ -780,6 +830,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "activated": "2013-06-24T16:39:19.000Z",
         "statusChanged": "2013-06-24T16:39:19.000Z",
         "lastLogin": "2013-06-24T17:39:19.000Z",
+        "lastUpdated": "2013-07-02T21:36:25.344Z",
         "profile": {
             "firstName": "Eric",
             "lastName": "Judy",
@@ -814,7 +865,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ]
 ```
 
-#### List Users with Status (Filter)
+#### List Users Updated after Timestamp
 
 ##### Request
 
@@ -822,7 +873,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 curl -v -H "Authorization: SSWS yourtoken" \
 -H "Accept: application/json" \
 -H "Content-Type: application/json" \
--X GET "https://your-domain.okta.com/api/v1/users?filter=status+eq+\"ACTIVE\""
+-X GET "https://your-domain.okta.com/api/v1/users?filter=lastUpdated+gt+\"2013-07-01T00:00:00.000Z\""
 ```
 
 ##### Response
@@ -836,6 +887,64 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "activated": "2013-06-24T16:39:19.000Z",
         "statusChanged": "2013-06-24T16:39:19.000Z",
         "lastLogin": "2013-06-24T17:39:19.000Z",
+        "lastUpdated": "2013-07-02T21:36:25.344Z",
+        "profile": {
+            "firstName": "Eric",
+            "lastName": "Judy",
+            "email": "eric@example.org",
+            "login": "eric@example.org",
+            "mobilePhone": "555-415-2011"
+        },
+        "credentials": {
+            "password": {},
+            "recovery_question": {
+                "question": "The stars are projectors?"
+            }
+        },
+        "_links": {
+            "resetPassword": {
+                "href": "https://your-domain.okta.com/api/v1/users/00uar9CIHZHPTVFRSEYZ/lifecycle/reset_password"
+            },
+            "forgotPassword": {
+                "href": "https://your-domain.okta.com/api/v1/users/00uar9CIHZHPTVFRSEYZ/credentials/forgot_password"
+            },
+            "changeRecoveryQuestion": {
+                "href": "https://your-domain.okta.com/api/v1/users/00uar9CIHZHPTVFRSEYZ/credentials/change_recovery_question"
+            },
+            "deactivate": {
+                "href": "https://your-domain.okta.com/api/v1/users/00uar9CIHZHPTVFRSEYZ/lifecycle/deactivate"
+            },
+            "changePassword": {
+                "href": "https://your-domain.okta.com/api/v1/users/00uar9CIHZHPTVFRSEYZ/credentials/change_password"
+            }
+        }
+    }    
+]
+```
+
+#### List Users with Status
+
+##### Request
+
+```sh
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users?filter=status+eq+\"ACTIVE\"+or+status+eq+\"RECOVERY\""
+```
+
+##### Response
+
+```json
+[
+    {
+        "id": "00uar9CIHZHPTVFRSEYZ",
+        "status": "ACTIVE",
+        "created": "2013-06-24T16:39:18.000Z",
+        "activated": "2013-06-24T16:39:19.000Z",
+        "statusChanged": "2013-06-24T16:39:19.000Z",
+        "lastLogin": "2013-06-24T17:39:19.000Z",
+        "lastUpdated": "2013-07-02T21:36:25.344Z",
         "profile": {
             "firstName": "Eric",
             "lastName": "Judy",
@@ -924,6 +1033,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -991,6 +1101,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -1056,6 +1167,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
     "activated": "2013-06-24T16:39:19.000Z",
     "statusChanged": "2013-06-24T16:39:19.000Z",
     "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
     "profile": {
         "firstName": "Isaac",
         "lastName": "Brock",
@@ -1120,6 +1232,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 ```json
 [
     {
+        "id": "auc01100002754172417",
         "label": "Google Apps Mail",
         "linkUrl": "https://your-domain.okta.com/home/google/0oa3omz2i9XRNSRIHBZO/50",
         "logoUrl": "https://your-domain.okta.com/img/logos/google-mail.png",
@@ -1131,6 +1244,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "sortOrder": 0
     },
     {
+        "id": "auc01100002754172415",
         "label": "Google Apps Calendar",
         "linkUrl": "https://your-domain.okta.com/home/google/0oa3omz2i9XRNSRIHBZO/54",
         "logoUrl": "https://your-domain.okta.com/img/logos/google-calendar.png",
@@ -1142,6 +1256,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "sortOrder": 1
     },
     {
+        "id": "auc01100002754172416",
         "label": "Box",
         "linkUrl": "https://your-domain.okta.com/home/boxnet/0oa3ompioiQCSTOYXVBK/72",
         "logoUrl": "https://your-domain.okta.com/img/logos/box.png",
@@ -1153,6 +1268,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
         "sortOrder": 3
     },
     {
+        "id": "auc01100002754172417",
         "label": "Salesforce.com",
         "linkUrl": "https://your-domain.okta.com/home/salesforce/0oa12ecnxtBQMKOXJSMF/46",
         "logoUrl": "https://your-domain.okta.com/img/logos/salesforce_logo.png",
