@@ -1504,6 +1504,91 @@ curl -v -H "Authorization: SSWS yourtoken" \
 }
 ```
 
+### Expire Password
+
+#### POST /users/:id/lifecycle/expire_password
+
+This operation will transition the user to the `status` of **PASSWORD_EXPIRED** and the user will not be able to login or initiate a forgot password flow. If `tempPassword` is passed, the user's password is reset to a temporary password that is returned.
+
+##### Request Parameters
+
+Parameter | Description | Param Type | DataType | Required | Default
+--- | --- | --- | --- | --- | ---
+id | `id` of user | URL | String | TRUE |
+tempPassword | Sets the user's password to a temporary password,  if `true` | Query | Boolean | FALSE | FALSE
+
+##### Response Parameters
+
+Returns an the complete user object by default. When `tempPassword` is `true`, returns the temporary password.
+
+```json
+{
+    "tempPassword": "HR076gb6"
+}
+```
+
+##### Request
+
+```sh
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X POST "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/expire_password?tempPassword=false"
+```
+
+##### Response
+
+```json
+{
+    "id": "00udp9BOIVEWHAAGSXRJ",
+    "status": "ACTIVE",
+    "created": "2014-03-04T06:14:07.000Z",
+    "activated": null,
+    "statusChanged": null,
+    "lastLogin": "2014-03-04T17:46:59.000Z",
+    "lastUpdated": "2014-03-04T17:54:48.000Z",
+    "profile": {
+        "firstName": "Add-Min",
+        "lastName": "O'Cloudy Tud",
+        "email": "webmaster@clouditude.net",
+        "login": "administrator1@clouditude.net",
+        "mobilePhone": null
+    },
+    "credentials": {
+        "password": {},
+        "recovery_question": {
+            "question": "Last 4 digits of your social security number?"
+        }
+    },
+    "_links": {
+        "resetPassword": {
+            "href": "http://rain.okta1.com:1802/api/v1/users/00udp9BOIVEWHAAGSXRJ/lifecycle/reset_password",
+            "method": "POST"
+        },
+        "expirePassword": {
+            "href": "http://rain.okta1.com:1802/api/v1/users/00udp9BOIVEWHAAGSXRJ/lifecycle/expire_password",
+            "method": "POST"
+        },
+        "forgotPassword": {
+            "href": "http://rain.okta1.com:1802/api/v1/users/00udp9BOIVEWHAAGSXRJ/credentials/forgot_password",
+            "method": "POST"
+        },
+        "changeRecoveryQuestion": {
+            "href": "http://rain.okta1.com:1802/api/v1/users/00udp9BOIVEWHAAGSXRJ/credentials/change_recovery_question",
+            "method": "POST"
+        },
+        "deactivate": {
+            "href": "http://rain.okta1.com:1802/api/v1/users/00udp9BOIVEWHAAGSXRJ/lifecycle/deactivate",
+            "method": "POST"
+        },
+        "changePassword": {
+            "href": "http://rain.okta1.com:1802/api/v1/users/00udp9BOIVEWHAAGSXRJ/credentials/change_password",
+            "method": "POST"
+        }
+    }
+}
+```
+
 ## Credential Operations
 	
 ### Forgot Password
