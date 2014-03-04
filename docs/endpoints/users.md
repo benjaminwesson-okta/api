@@ -1509,7 +1509,7 @@ curl -v -H "Authorization: SSWS yourtoken" \
 
 #### POST /users/:id/lifecycle/expire_password
 
-This operation will transition the user to the `status` of **PASSWORD_EXPIRED** and the user will not be able to login or initiate a forgot password flow. If `tempPassword` is passed, the user's password is reset to a temporary password that is returned.
+This operation will transition the user to the `status` of **PASSWORD_EXPIRED** and the user will be required to change their password at their next login. If `tempPassword` is passed, the user's password is reset to a temporary password that is returned, and then the temporary password is expired.
 
 ##### Request Parameters
 
