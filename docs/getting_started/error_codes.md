@@ -98,5 +98,7 @@ Operation failed because user profile is mastered under another system
 
 This endpoint has been deprecated.
 
+#### E0000064 
 
+Password expired and must be changed.
 
