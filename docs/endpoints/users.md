@@ -35,6 +35,7 @@ The User API provides operations for user management.
 	- [Deactivate](#deactivate-user)
 	- [Unlock](#unlock-user)
 	- [Reset Password](#reset-password)
+	- [Expire Password](#expire-password)
 - [Credential Operations](#credential-operations)
 	- [Forgot Password](#forgot-password)
 	- [Change Password](#change-password)
