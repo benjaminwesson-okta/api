@@ -1,7 +1,7 @@
 # Error Codes
 
 
-This document provides further information about the errors that the Okta API returns. The first table is list by error code, and the second table is listed by HTTP return code.
+This document provides further information about the errors that the Okta API returns. The first table is listed by error code, and the second table is listed by HTTP return code.
 
 
 
