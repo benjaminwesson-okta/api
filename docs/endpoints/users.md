@@ -16,6 +16,7 @@ The User API provides operations for user management.
 		- [Create User with Password](#create-user-with-password)
 		- [Create User with Password & Recovery Question](#create-user-with-password--recovery-question)
 	- [Get User](#get-user)
+		- [Get Current User](#get-current-user)
 		- [Get User with id](#get-user-with-id)
 		- [Get User with login](#get-user-with-login)
 		- [Get User with login shortname](#get-user-with-login-shortname)
@@ -495,9 +496,70 @@ id | `id`, `login`, or *login shortname* (as long as it is unambiguous) | URL | 
 
 > When fetching a user by `login` or `login shortname`, you should [URL encode](http://en.wikipedia.org/wiki/Percent-encoding) the request parameter to ensure reserved characters at escaped properly.  Logins with a `/` character can only be fetched by 'id' due to security issues with escaping the `/` character.
 
+>You can substitute *me* for the id to fetch the current user.
+
 ##### Response Parameters
 
 Fetched [User](#user-model)
+
+#### Get Current User
+
+##### Request
+
+```sh
+curl -v -H "Authorization: SSWS yourtoken" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-X GET "https://your-domain.okta.com/api/v1/users/me"
+```
+
+##### Response
+
+```json
+{
+    "id": "00ub0oNGTSWTBKOLGLNR",
+    "status": "ACTIVE",
+    "created": "2013-06-24T16:39:18.000Z",
+    "activated": "2013-06-24T16:39:19.000Z",
+    "statusChanged": "2013-06-24T16:39:19.000Z",
+    "lastLogin": "2013-06-24T17:39:19.000Z",
+    "lastUpdated": "2013-07-02T21:36:25.344Z",
+    "profile": {
+        "firstName": "Isaac",
+        "lastName": "Brock",
+        "email": "isaac@example.org",
+        "login": "isaac@example.org",
+        "mobilePhone": "555-415-1337"
+    },
+    "credentials": {
+        "password": {},
+        "recovery_question": {
+            "question": "Who's a major player in the cowboy scene?"
+        }
+    },
+    "_links": {
+        "resetPassword": {
+            "href": "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/reset_password"
+        },
+        "expirePassword": {
+            "href": "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/expire_password"
+        },
+        "forgotPassword": {
+            "href": "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/forgot_password"
+        },
+        "changeRecoveryQuestion": {
+            "href": "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/change_recovery_question"
+        },
+        "deactivate": {
+            "href": "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/lifecycle/deactivate"
+        },
+        "changePassword": {
+            "href": "https://your-domain.okta.com/api/v1/users/00ub0oNGTSWTBKOLGLNR/credentials/change_password"
+        }
+    }
+}
+```
+
 
 #### Get User with id
 
