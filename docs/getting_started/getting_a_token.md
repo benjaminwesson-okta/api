@@ -7,3 +7,7 @@ Administrators can generate tokens to access the API via the Security > API sect
 ## Token Expiration
 
 Okta uses a bearer token for API authentication with a sliding scale expiration.  Tokens are valid for 30 days and automatically refresh with each API call.  Tokens that are not used for 30 days will expire.  The token lifetime is currently fixed and cannot be changed for your organization. 
+
+## Token Deactivation
+
+If a user account is deactivated in Okta, the API Token is deactivated at the same time.
