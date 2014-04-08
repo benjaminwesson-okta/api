@@ -10,4 +10,4 @@ Okta uses a bearer token for API authentication with a sliding scale expiration.
 
 ## Token Deactivation
 
-If a user account is deactivated in Okta, the API Token is deactivated at the same time.
+If a user account is deactivated in Okta, the API Token is deprovisioned at the same time.
