@@ -1,3 +1,5 @@
 # Okta API
 
-This repository contains client code and [documentation](https://github.com/okta/api/blob/master/docs/index.md) for Okta's API.
+This repository has been deprecated.  
+
+> Please visit the new [developer.okta.com documentation](http://developer.okta.com/docs/index.html) for Okta's API
