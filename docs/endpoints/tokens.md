@@ -1,1 +1,1 @@
-> Please visit the new [developer.okta.com](http://developer.okta.com/docs) site for [this topic](http://developer.okta.com/docs/endpoints/tokens.html)
+> Please visit the new [developer.okta.com](http://developer.okta.com/docs/getting_started/design_principles.html) site for [this topic](http://developer.okta.com/docs/endpoints/tokens.html)
