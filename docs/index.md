@@ -12,11 +12,11 @@ Contents
 * [Error Codes](http://developer.okta.com/docs/getting_started/error_codes.html)
 
 ### Endpoints
-* [Users](http://developer.okta.com/docs/endpoints/users.html)
-* [Groups](http://developer.okta.com/docs/endpoints/groups.html)
-* [Sessions](http://developer.okta.com/docs/endpoints/sessions.html)
-* [Events](http://developer.okta.com/docs/endpoints/events.html)
-* [Apps](http://developer.okta.com/docs/endpoints/apps.html) (Beta)
+* [Users](http://developer.okta.com/docs/api/rest/users.html)
+* [Groups](http://developer.okta.com/docs/api/rest/groups.html)
+* [Sessions](http://developer.okta.com/docs/api/rest/sessions.html)
+* [Events](http://developer.okta.com/docs/api/rest/events.html)
+* [Apps](http://developer.okta.com/docs/api/rest/apps.html) (Beta)
 
 ### Examples
 * [Retrieving a Session Cookie](http://developer.okta.com/docs/examples/session_cookie.html)

@@ -1,1 +1,1 @@
-> Please visit the new [developer.okta.com](http://developer.okta.com/docs/getting_started/design_principles.html) site for [this topic](http://developer.okta.com/docs/endpoints/apps.html)
+> Please visit the new [developer.okta.com](http://developer.okta.com/docs/getting_started/design_principles.html) site for [this topic](http://developer.okta.com/docs/api/rest/apps.html)
